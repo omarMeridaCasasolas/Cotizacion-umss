@@ -15,19 +15,19 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title>Hola Mundo</title>
+    <title>Inicio de session</title>
 </head>
-<body >
-    <main class="container">
+<body class="bg-secondary my-5">
+    <main class="container bg-light rounded p-3">
             <form action="controlador/verificarUsuario.php" method="POST">
-            <h1>Validar Usuario</h1>
+            <h1 class="text-center">Validar Usuario</h1>
             <div class="form-group">
                 <label for="user"></label>
-                <input type="text" name="user" class="form-control" id="user">
+                <input type="text" name="user" class="form-control" id="user" required>
             </div>
             <div class="form-group">
                 <label for="pass"></label>
-                <input type="password" name="pass" class="form-control" id="pass">
+                <input type="password" name="pass" class="form-control" id="pass" required>
             </div>
             <div class="text-center">
                 <input type="submit" value="Ingresar" class="btn btn-primary">
