@@ -1,25 +1,25 @@
 <?php
     require_once("conexion.php");
-    class User extends Conexion{
+    class Facultad extends Conexion{
         private $sentenceSQL;
-        public function User(){
+        public function Facultad(){
             parent::__construct();
         }
         public function cerrarConexion(){
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
-        public function obtenerUsuario($user,$pass){
-            $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
+        public function getFacultades(){
+            $sql = "SELECT * FROM facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
+            $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
-            return $respuesta[0];
+            echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
-        public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        public function getFacultadeSelect(){
+            $sql = "SELECT id_facultad, nombre_facultad FROM facultad WHERE id_facultad NOT IN
+            (SELECT id_facultad FROM unidad_administrativa)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

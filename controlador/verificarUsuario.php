@@ -11,17 +11,18 @@
             include_once("../modelo/model_rol.php");
             $rol = new Rol();
             $res = $rol->getRolUsuario($respuesta['id_usuario']);
+            var_dump($res);
             $rol->cerrarConexion();
-            $_SESSION['rolUsuario'] = $rol['Role'];
+            $_SESSION['rolUsuario'] = $res['role'];
             switch ($_SESSION['rolUsuario']) {
-                case 'superUsuario':
-                    header("Location:../vista/home_super_usuario.php");
+                case 'Administrador':
+                    header("Location:../vista/home_Administrador.php");
                     break;
                 case 'unidadAdministrativa':
-                    header("Location:../vista/home_usuario.php");
+                    //header("Location:../vista/home_usuario.php");
                     break;
                 case 'unidadDeGastos':
-                    header("Location:../vista/home_usuario.php");
+                    //header("Location:../vista/home_usuario.php");
                     break;
                 default:
                     # code...

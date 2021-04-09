@@ -1,25 +1,24 @@
 <?php
     require_once("conexion.php");
-    class User extends Conexion{
+    class Rol extends Conexion{
         private $sentenceSQL;
-        public function User(){
+        public function Rol(){
             parent::__construct();
         }
         public function cerrarConexion(){
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
-        public function obtenerUsuario($user,$pass){
-            $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
+        public function getRolUsuario($idUsuario){
+            $sql = "SELECT * FROM usuario_tipo WHERE id_usuario = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
+            $sentenceSQL-> execute(array(":id"=>$idUsuario));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
             return $respuesta[0];
         }
-        public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        public function getFacultadeSelect(){
+            $sql = "SELECT id_facultad, nombre_facultad FROM facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

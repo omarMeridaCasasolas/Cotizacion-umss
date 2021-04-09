@@ -1,8 +1,8 @@
 <?php
     require_once("conexion.php");
-    class User extends Conexion{
+    class UserUA extends Conexion{
         private $sentenceSQL;
-        public function User(){
+        public function UserUA(){
             parent::__construct();
         }
         public function cerrarConexion(){
@@ -15,17 +15,26 @@
             $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
-            return $respuesta[0];
+            return $respuesta[0];  
         }
-        public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        public function insertarUsuarioUA($usuario,$idUA){
+            $sql = "INSERT INTO usuario_ua (id_usuario, id_uni_admin) VALUES(:idUsuario,:idUA)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute();
-            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $res = $sentenceSQL->execute(array(":idUsuario"=>$usuario,":idUA"=>$idUA));
+            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
-            return json_encode($respuesta);
+            //$res = json_encode($respuesta);
+            return $res;
         }
+        // public function getUsuariosAdministrativos(){
+        //     $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
+        //     id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        //     $sentenceSQL = $this->connexion_bd->prepare($sql);
+        //     $sentenceSQL-> execute();
+        //     $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+        //     $sentenceSQL->closeCursor();
+        //     return json_encode($respuesta);
+        // }
         // public function EliminarFacultad($idFacultad){
         //     $sql = "DELETE FROM facultades WHERE id_facultad = :id";
         //     $sentenceSQL = $this->connexion_bd->prepare($sql);

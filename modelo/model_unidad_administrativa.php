@@ -1,31 +1,48 @@
 <?php
     require_once("conexion.php");
-    class User extends Conexion{
+    class UnidadAdministrativa extends Conexion{
         private $sentenceSQL;
-        public function User(){
+        public function UnidadAdministrativa(){
             parent::__construct();
         }
         public function cerrarConexion(){
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
-        public function obtenerUsuario($user,$pass){
-            $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
-            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            $sentenceSQL->closeCursor();
-            return $respuesta[0];
-        }
-        public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        public function getUnidadAdministrativa(){
+            $sql = "SELECT id_uni_admin, nombre_ua, gestion_ua, nombre_facultad, activo_ua FROM 
+            unidad_administrativa INNER JOIN facultad ON facultad.id_facultad = unidad_administrativa.id_facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
-            return json_encode($respuesta);
+            echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
+        public function insertarUnidadAdministrativa($nombre,$idFacultad,$gestion){
+            $sql = "INSERT INTO unidad_administrativa (nombre_ua, id_facultad, gestion_ua, activo_ua) VALUES(:nombre,:idFacultad,:gestion,true)";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":idFacultad"=>$idFacultad,":gestion"=>$gestion));
+            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            if($res == 1 || $res == true){
+                $res = $this->connexion_bd->lastInsertId();
+                $string = preg_replace("/[\r\n|\n|\r]+/", PHP_EOL, $res);
+                $sentenceSQL->closeCursor();
+                return $string;
+            }
+            $sentenceSQL->closeCursor();
+            //$res = json_encode($respuesta);
+            return $res;
+        } 
+
+        public function bajaUA($idUnidadAdministrativa){
+            $sql = "UPDATE unidad_administrativa SET activo_ua = false WHERE id_uni_admin = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUnidadAdministrativa));
+            $sentenceSQL->closeCursor();
+            return $respuesta;
+        }
+
+
         // public function EliminarFacultad($idFacultad){
         //     $sql = "DELETE FROM facultades WHERE id_facultad = :id";
         //     $sentenceSQL = $this->connexion_bd->prepare($sql);
@@ -54,23 +71,8 @@
         //     return $res;
         // }
 
-        // public function insertarFacultad($nomFacultad,$facCodigo,$facFechaCrea,$dirFac){
-        //     $sql = "INSERT INTO facultades(nombre_facultad,fecha_creacion,codigo_facultad,director_academico) VALUES(:nameFacultad,:fecha,:codigo,:director)";
-        //     $sentenceSQL = $this->connexion_bd->prepare($sql);
-        //     $res = $sentenceSQL->execute(array(":nameFacultad"=>$nomFacultad,":fecha"=>$facFechaCrea,":codigo"=>$facCodigo,":director"=>$dirFac));
-        //     //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-        //     $sentenceSQL->closeCursor();
-        //     //$res = json_encode($respuesta);
-        //     return $res;
-        // }
 
-        // public function AsignarDirectorFacultad($idFacultad,$nomDirector){
-        //     $sql = "UPDATE facultades SET director_academico = :director WHERE id_facultad = :id";
-        //     $sentenceSQL = $this->connexion_bd->prepare($sql);
-        //     $respuesta = $sentenceSQL-> execute(array(":director"=>$nomDirector,":id"=>$idFacultad));
-        //     $sentenceSQL->closeCursor();
-        //     return $respuesta;
-        // }
+
 
         // public function cambiarDirectorNinguno($idFacultad,$director){
         //     $sql = "UPDATE facultades SET director_academico = :director WHERE id_facultad = :id";
