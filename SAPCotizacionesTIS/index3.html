@@ -1,0 +1,334 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.jeasyui.com/easyui/themes/default/easyui.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.jeasyui.com/easyui/themes/icon.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.jeasyui.com/easyui/themes/color.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.jeasyui.com/easyui/demo/demo.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://www.jeasyui.com/easyui/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"
+    ></script>
+
+    <title>Inicio de session</title>
+  </head>
+  <body>
+    <h2>Registro de Unidades de Gastos</h2>
+
+    <div class="panel datagrid panel-htop" style="width: 1200px">
+      <div class="panel-header" style="width: 1200px">
+        <div class="panel-title">Unidades de Gastos</div>
+        <div class="panel-tool"></div>
+      </div>
+      <div
+        class="datagrid-wrap panel-body"
+        title=""
+        style="width: 1200px; height: 218px"
+      >
+        <div id="toolbar" class="datagrid-toolbar">
+          <div id="tb">
+            <input type="term" placeholder="Buscar Unidad" />
+            <a
+              href="javascript:void(0);"
+              class="easyui-linkbutton l-btn l-btn-small l-btn-plain"
+              plain="true"
+              onclick="doSearch()"
+              group=""
+              id=""
+              ><span class="l-btn-left"
+                ><span class="l-btn-text">Buscar</span></span
+              ></a
+            >
+          </div>
+          <div id="tb2" style="">
+            <a
+              href="javascript:void(0)"
+              class="easyui-linkbutton l-btn l-btn-small l-btn-plain"
+              iconcls="icon-add"
+              plain="true"
+              onclick="newUser()"
+              group=""
+              id=""
+              ><span class="l-btn-left l-btn-icon-left"
+                ><span class="l-btn-text">Anadir Unidad de Gasto</span
+                ><span class="l-btn-icon icon-add">&nbsp;</span></span
+              ></a
+            >
+            <a
+              href="javascript:void(0)"
+              class="easyui-linkbutton l-btn l-btn-small l-btn-plain"
+              iconcls="icon-edit"
+              plain="true"
+              onclick="editUser()"
+              group=""
+              id=""
+              ><span class="l-btn-left l-btn-icon-left"
+                ><span class="l-btn-text">Editar Unidad de Gasto</span
+                ><span class="l-btn-icon icon-edit">&nbsp;</span></span
+              ></a
+            >
+            <a
+              href="javascript:void(0)"
+              class="easyui-linkbutton l-btn l-btn-small l-btn-plain"
+              iconcls="icon-remove"
+              plain="true"
+              onclick="destroyUser()"
+              group=""
+              id=""
+              ><span class="l-btn-left l-btn-icon-left"
+                ><span class="l-btn-text">Remover Unidad De Gasto</span
+                ><span class="l-btn-icon icon-remove">&nbsp;</span></span
+              ></a
+            >
+          </div>
+        </div>
+        <div class="datagrid-view" style="width: 1198px; height: 118.812px">
+          <div class="datagrid-view1" style="width: 30px">
+            <div class="datagrid-header" style="width: 30px; height: 32px">
+              <div class="datagrid-header-inner" style="display: block">
+                <table
+                  class="datagrid-htable"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  style="height: 32px"
+                >
+                  <tbody>
+                    <tr class="datagrid-header-row">
+                      <td rowspan="0">
+                        <div class="datagrid-header-rownumber"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="datagrid-body"
+              style="width: 30px; margin-top: 0px; height: 86.8125px"
+            >
+              <div class="datagrid-body-inner"></div>
+            </div>
+            <div class="datagrid-footer" style="width: 30px">
+              <div class="datagrid-footer-inner" style="display: none"></div>
+            </div>
+          </div>
+          <div class="datagrid-view2" style="width: 1168px">
+            <div class="datagrid-header" style="width: 1168px; height: 32px">
+              <div class="datagrid-header-inner" style="display: block">
+                <table
+                  class="datagrid-htable"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  style="height: 32px"
+                >
+                  <tbody>
+                    <tr class="datagrid-header-row">
+                      <td class="" style="" field="firstname">
+                        <div
+                          class="datagrid-cell dg_datagrid-cell-c1-firstname"
+                        >
+                          <span>Nombre de Unidad de Gastos</span
+                          ><span class="datagrid-sort-icon"></span>
+                        </div>
+                      </td>
+                      <td class="" style="" field="lastname">
+                        <div class="datagrid-cell dg_datagrid-cell-c1-lastname">
+                          <span>Activo</span
+                          ><span class="datagrid-sort-icon"></span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="datagrid-body"
+              style="
+                width: 1168px;
+                margin-top: 0px;
+                height: 86.8125px;
+                overflow-x: hidden;
+              "
+            ></div>
+            <div class="datagrid-footer" style="width: 1168px">
+              <div class="datagrid-footer-inner" style="display: none"></div>
+            </div>
+          </div>
+          <table
+            id="dg"
+            title="Unidades de Gastos"
+            class="easyui-datagrid datagrid-f"
+            style="display: none"
+            url="get_users.php"
+            toolbar="#toolbar"
+            pagination="true"
+            rownumbers="true"
+            fitcolumns="true"
+            singleselect="true"
+          >
+            <thead>
+              <tr>
+                <th field="firstname" width="50">Nombre de Unidad de Gastos</th>
+                <th field="lastname" width="50">Activo</th>
+              </tr>
+            </thead>
+          </table>
+          <style type="text/css" easyui="true">
+            .datagrid-header-rownumber {
+              width: 29px;
+            }
+            .datagrid-cell-rownumber {
+              width: 29px;
+            }
+            .dg_datagrid-cell-c1-firstname {
+              width: 49px;
+            }
+            .dg_datagrid-cell-c1-lastname {
+              width: 49px;
+            }
+          </style>
+        </div>
+        <div class="datagrid-pager pagination">
+          <table cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+              <tr>
+                <td>
+                  <select class="pagination-page-list">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                    <option>40</option>
+                    <option>50</option>
+                  </select>
+                </td>
+                <td><div class="pagination-btn-separator"></div></td>
+                <td>
+                  <a
+                    href="javascript:;"
+                    class="l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                    group=""
+                    id=""
+                    ><span class="l-btn-left l-btn-icon-left"
+                      ><span class="l-btn-text l-btn-empty">&nbsp;</span
+                      ><span class="l-btn-icon pagination-first"
+                        >&nbsp;</span
+                      ></span
+                    ></a
+                  >
+                </td>
+                <td>
+                  <a
+                    href="javascript:;"
+                    class="l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                    group=""
+                    id=""
+                    ><span class="l-btn-left l-btn-icon-left"
+                      ><span class="l-btn-text l-btn-empty">&nbsp;</span
+                      ><span class="l-btn-icon pagination-prev"
+                        >&nbsp;</span
+                      ></span
+                    ></a
+                  >
+                </td>
+                <td><div class="pagination-btn-separator"></div></td>
+                <td><span style="padding-left: 6px">Page</span></td>
+                <td>
+                  <input
+                    class="pagination-num"
+                    type="text"
+                    value="1"
+                    size="2"
+                  />
+                </td>
+                <td><span style="padding-right: 6px">of 0</span></td>
+                <td><div class="pagination-btn-separator"></div></td>
+                <td>
+                  <a
+                    href="javascript:;"
+                    class="l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                    group=""
+                    id=""
+                    ><span class="l-btn-left l-btn-icon-left"
+                      ><span class="l-btn-text l-btn-empty">&nbsp;</span
+                      ><span class="l-btn-icon pagination-next"
+                        >&nbsp;</span
+                      ></span
+                    ></a
+                  >
+                </td>
+                <td>
+                  <a
+                    href="javascript:;"
+                    class="l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                    group=""
+                    id=""
+                    ><span class="l-btn-left l-btn-icon-left"
+                      ><span class="l-btn-text l-btn-empty">&nbsp;</span
+                      ><span class="l-btn-icon pagination-last"
+                        >&nbsp;</span
+                      ></span
+                    ></a
+                  >
+                </td>
+                <td><div class="pagination-btn-separator"></div></td>
+                <td>
+                  <a
+                    href="javascript:;"
+                    class="l-btn l-btn-small l-btn-plain"
+                    group=""
+                    id=""
+                    ><span class="l-btn-left l-btn-icon-left"
+                      ><span class="l-btn-text l-btn-empty">&nbsp;</span
+                      ><span class="l-btn-icon pagination-load"
+                        >&nbsp;</span
+                      ></span
+                    ></a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination-info">Displaying 0 to 0 of 0 items</div>
+          <div style="clear: both"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
