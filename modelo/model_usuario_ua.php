@@ -9,6 +9,14 @@
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
+
+        public function eliminarUsuariosUA($idUA){
+            $sql = "DELETE FROM usuario_ua WHERE id_uni_admin = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUA));
+            $sentenceSQL->closeCursor();
+            return $respuesta;
+        }
         public function obtenerUsuario($user,$pass){
             $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
@@ -25,6 +33,15 @@
             $sentenceSQL->closeCursor();
             //$res = json_encode($respuesta);
             return $res;
+        }
+        public function listaUsuariosUA($idUA){
+            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE id_usuario IN (SELECT id_usuario FROM usuario_ua WHERE id_uni_admin = :idUA)";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $sentenceSQL->execute(array(":idUA"=>$idUA));
+            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            //$res = json_encode($respuesta); listaUsuariosUA
+            return json_encode($respuesta);
         }
         // public function getUsuariosAdministrativos(){
         //     $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 

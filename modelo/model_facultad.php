@@ -19,13 +19,15 @@
         }
         public function getFacultadeSelect(){
             $sql = "SELECT id_facultad, nombre_facultad FROM facultad WHERE id_facultad NOT IN
-            (SELECT id_facultad FROM unidad_administrativa)";
+            (SELECT id_facultad FROM unidad_administrativa WHERE activo_ua = true)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
             return json_encode($respuesta);
         }
+
+
         // public function EliminarFacultad($idFacultad){
         //     $sql = "DELETE FROM facultades WHERE id_facultad = :id";
         //     $sentenceSQL = $this->connexion_bd->prepare($sql);

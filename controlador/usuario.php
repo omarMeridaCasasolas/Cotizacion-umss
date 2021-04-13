@@ -4,7 +4,7 @@
         $metodo = $_REQUEST['metodo'];
         $user = new User();
         $res ="";
-        switch ($metodo) { 
+        switch ($metodo) {  
             case 'getUsuariosAdministrativos':
                 $res = $user->getUsuariosAdministrativos();
                 break;

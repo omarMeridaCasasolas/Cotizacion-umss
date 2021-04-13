@@ -113,10 +113,75 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <form action="" id="formBajaUnidadAcademica">
-                        <input type="text" name="bajaUA" id="bajaUA">
+                        <input type="text" name="bajaUA" id="bajaUA" class="d-none">
                         <h5>Desea dar de baja la unidad administrattiva: <strong id='bajaUANombre'>UA</strong>, desabilitara sus funciones maestras</h5>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Baja">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA EDITAR -->
+    <div class="modal fade" id="myModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <!-- Modal Header -->
+                <div class="modal-header bg-warning">
+                    <h4 class="modal-title">Editar Unidad Administrativa</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" id="formEditUnidadAcademica">
+                        <input type="text" name="editUAID" id="editUAID" class="d-none">
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="">Nombre</label>
+                                <input type="text" name="editUANombre" id="editUANombre" class="form-control">
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="">Gestion</label>
+                                <input type="text" name="editUAGestion" id="editUAGestion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="">Facultad:</label>
+                                <select class="form-control" id="editUAFacultad">
+                                    <!-- <option value="" selected disabled>Facultad de Z</option> -->
+                                </select>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="">Estado:</label>
+                                <select class="form-control" id="editUAEstado">
+                                    <option value="true">Si</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="">
+                            <h4 class="text-primary">Lista de responsables anteriorres:</h4>
+                            <ul id="listaResponsablesAnt">
+                            
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepatamentoResponsable">Seleccione responsable</label>
+                                <select multiple  id="editDepatamentoResponsable" class="form-control" required>
+                                            <!-- <option value="defaul">Ninguno</option>
+                                            <option value="1">Ana Panozo Merida</option>
+                                            <option value="2">Isabel Flores Castro</option>
+                                            <option value="3">Carla Teran Andrade</option> -->
+                                </select>
+                            </div>
+                        <div class="move-container2"></div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Actualizar">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
                     </form>

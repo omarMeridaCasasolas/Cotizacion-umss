@@ -9,6 +9,15 @@
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
+
+        public function actualizarUA($idUA,$nombreUA,$gestionUA,$activoUA){
+            $sql = "UPDATE unidad_administrativa SET nombre_ua = :nombre, gestion_ua = :gestion, activo_ua = :activo WHERE id_uni_admin = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUA,":nombre"=>$nombreUA,":gestion"=>$gestionUA,":activo"=>$activoUA));
+            $sentenceSQL->closeCursor();
+            return $respuesta;
+        }
+
         public function getUnidadAdministrativa(){
             $sql = "SELECT id_uni_admin, nombre_ua, gestion_ua, nombre_facultad, activo_ua FROM 
             unidad_administrativa INNER JOIN facultad ON facultad.id_facultad = unidad_administrativa.id_facultad";

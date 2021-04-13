@@ -5,6 +5,13 @@
         $unidadAdministrativa = new UnidadAdministrativa();
         $res ="";
         switch ($metodo) { 
+            case 'actualizarUA':
+                $idUA = $_REQUEST['idUA'];
+                $nombreUA = $_REQUEST['nombreUA'];
+                $gestionUA = $_REQUEST['gestionUA'];
+                $activoUA  = $_REQUEST['activoUA'];
+                $res = $unidadAdministrativa->actualizarUA($idUA,$nombreUA,$gestionUA,$activoUA);
+                break;
             case 'bajaUA':
                 $idUnidadAdministrativa = $_REQUEST['idUA'];
                 $res = $unidadAdministrativa->bajaUA($idUnidadAdministrativa);
