@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     $("#tablaUnidadAdministrativa tbody").on('click','button.bajaUA',function () {
         let dataBajaUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
-        console.log(dataBajaUA);
+        // console.log(dataBajaUA);
         $("#bajaUA").val(dataBajaUA.id_uni_admin);
         //console.log(dataEditDirector);
         $('#bajaUANombre').html(dataBajaUA.nombre_ua);
@@ -166,57 +166,66 @@ function getUnidadesAdministrativa(){
     $('#tablaUnidadAdministrativa').dataTable().fnDestroy();
     tablaUnidadAdministrativa = $("#tablaUnidadAdministrativa").DataTable({
         responsive: true,
-        language:{
-            "sProcessing":     "Procesando...",
-            "sLengthMenu":     "Mostrar _MENU_ registros",
-            "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla",
-            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix":    "",
-            "sSearch":         "Buscar:",
-            "sUrl":            "",
-            "sInfoThousands":  ",",
-            "sLoadingRecords": "Cargando...",
-            "oPaginate": {
-                "sFirst":    "Primero",
-                "sLast":     "Último",
-                "sNext":     "Siguiente",
-                "sPrevious": "Anterior"
-            },
-            "oAria": {
-                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            },
-            "buttons": {
-                "copy": "Copiar",
-                "colvis": "Visibilidad"
-            }
+        "order": [[ 3, "asc" ]],
+        language: {
+          sProcessing: "Procesando...",
+          sLengthMenu: "Mostrar _MENU_ registros",
+          sZeroRecords: "No se encontraron resultados",
+          sEmptyTable: "Ningún dato disponible en esta tabla",
+          sInfo:
+            "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+          sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+          sInfoPostFix: "",
+          sSearch: "Buscar:",
+          sUrl: "",
+          sInfoThousands: ",",
+          sLoadingRecords: "Cargando...",
+          oPaginate: {
+            sFirst: "Primero",
+            sLast: "Último",
+            sNext: "Siguiente",
+            sPrevious: "Anterior",
+          },
+          oAria: {
+            sSortAscending:
+              ": Activar para ordenar la columna de manera ascendente",
+            sSortDescending:
+              ": Activar para ordenar la columna de manera descendente",
+          },
+          buttons: {
+            copy: "Copiar",
+            colvis: "Visibilidad",
+          },
         },
-        "ajax":{
-            "method":"POST",
-            "data" : {'metodo':'getUnidadAdministrativa'},
-            "url":"../controlador/unidadAdministrativa.php"
+        ajax: {
+          method: "POST",
+          data: { metodo: "getUnidadAdministrativa" },
+          url: "../controlador/unidadAdministrativa.php",
         },
-        "columns":[
-            {"data":"nombre_ua","width": "25%"},
-            {"data":"gestion_ua","width": "15%"},
-            {"data":"nombre_facultad","width": "30%"},
-            {"data": "activo_ua", // can be null or undefined
+        columns: [
+          { data: "nombre_ua", width: "25%" },
+          { data: "gestion_ua", width: "15%" },
+          { data: "nombre_facultad", width: "30%" },
+          {
+            data: "activo_ua", // can be null or undefined
             // "defaultContent": "Sin Asignacion", "width": "15%"},
-                render: function(data) { 
-                    if(data == true) {
-                        return '<h5><span class="badge badge-success">Activo</span></h5>' 
-                    }
-                    else {
-                        return '<h5><span class="badge badge-danger">Baja</span></h5>'
-                    }
-                }, "width": "15%"
+            render: function (data) {
+              if (data == true) {
+                return '<h5><span class="badge badge-success">Activo</span></h5>';
+              } else {
+                return '<h5><span class="badge badge-danger">Baja</span></h5>';
+              }
             },
-            {"data": null,"defaultContent":"<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-coffee'></i></button>","width": "15%"}
+            width: "15%",
+          },
+          {
+            data: null,
+            defaultContent:
+              "<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-sync'></i></button>",
+            width: "15%",
+          },
         ],
-        "order": [[ 3, "asc" ]]
     });
 }
 

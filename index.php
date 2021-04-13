@@ -23,7 +23,7 @@
             <h1 class="text-center">Validar Usuario</h1>
             <div class="form-group">
                 <label for="user"></label>
-                <input type="text" name="user" class="form-control" id="user" required>
+                <input type="mail" name="user" class="form-control" id="user" required>
             </div>
             <div class="form-group">
                 <label for="pass"></label>
@@ -35,4 +35,6 @@
         </form>
     </main>
 </body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="vista/src/index.js"></script>
 </html>

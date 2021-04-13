@@ -20,10 +20,23 @@
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-    <nav>
-    <h2>Bienvenido <?php echo $_SESSION['nombreUsuario'];?></h2>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- Brand/logo -->
+    <a class="navbar-brand" href="#"><h2>Bienvenido <?php echo $_SESSION['nombreUsuario'];?></h2></a>
+    
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+        <a class="nav-link" href="home_administrador.php">Unidad Administrativa</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#">Unidad de gastos</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="home_admi_usuario.php">Usuarios</a>
+        </li>
+    </ul>
     </nav>
-    <button class="btn btn-default" id="btnRowAdd">Agregar</button>
     <main class="container bg-light rounded-lg border p-2">
         <h1 class="text-primary text-center">Unidades Administrativas</h1>
         <div class="m-3">
@@ -65,6 +78,7 @@
                                 <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control">
                                     <option value="defaul">Ninguno</option>
                                 </select>
+                                <span class="text-darnger">* Facultadas sin asignacion</span>
                             </div>
                         <div class="row">
                             <div class="col-8">
@@ -85,7 +99,7 @@
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="addDepatamentoGestion">Selecione Gestion</label>
-                                    <input type="text" name="addDepatamentoGestion" class="form-control" id="addDepatamentoGestion" required>
+                                    <input type="text" name="addDepatamentoGestion" class="form-control" id="addDepatamentoGestion" pattern="[0-9]{4}" required>
                                 </div>
                             </div>
                         </div>
@@ -142,11 +156,11 @@
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Nombre</label>
-                                <input type="text" name="editUANombre" id="editUANombre" class="form-control">
+                                <input type="text" name="editUANombre" id="editUANombre" class="form-control" required pattern="[0-9]{4}">
                             </div>
                             <div class="form-group col-4">
                                 <label for="">Gestion</label>
-                                <input type="text" name="editUAGestion" id="editUAGestion" class="form-control">
+                                <input type="text" name="editUAGestion" id="editUAGestion" class="form-control" required pattern="[0-9]{4}">
                             </div>
                         </div>
                         <div class="row">
