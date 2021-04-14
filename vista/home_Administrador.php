@@ -78,7 +78,6 @@
                                 <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control" required>
                                     <option value="defaul">Ninguno</option>
                                 </select>
-                                <span class="text-darnger">* Facultadas sin asignacion</span>
                             </div>
                         <div class="row">
                             <div class="col-8">

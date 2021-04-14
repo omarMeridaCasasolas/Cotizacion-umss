@@ -1,4 +1,4 @@
-let tablaUnidadAdministrativa, selectEditUA;
+let tablaUnidadAdministrativa, selectEditUA , selectAddUA ;
 $(document).ready(function () {
     getUnidadesAdministrativa();
     actualizarFacultades();
@@ -11,6 +11,7 @@ $(document).ready(function () {
     $("#tablaUnidadAdministrativa tbody").on('click','button.editUA ',function () {
         let dataEditUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
         //console.log(dataEditUA);
+        selectEditUA.reload();
         $("#listaResponsablesAnt").empty();
         listaDeUsuariosUA(dataEditUA.id_uni_admin);
         $("#editUAID").val(dataEditUA.id_uni_admin);
@@ -20,6 +21,7 @@ $(document).ready(function () {
         $("#editUAFacultad").append("<option value="+dataEditUA.nombre_facultad.replace(/ /g, "")+" selected disabled>"+dataEditUA.nombre_facultad+"</option>");
         $("#editUAFacultad").val(dataEditUA.nombre_facultad.replace(/ /g, ""));
         $("#editUAEstado").val(String(dataEditUA.activo_ua));
+        //$("#move-container2").empty();
     });
 
     $("#tablaUnidadAdministrativa tbody").on('click','button.bajaUA',function () {
@@ -43,6 +45,7 @@ $(document).ready(function () {
         let idFacultad = $("#editUAFacultad").val();
         let gestionUA = $("#editUAGestion").val().trim();
         let activoUA = $("#editUAEstado").val();
+        $('#myModal2').modal('hide');
         $.ajax({
             type: "POST",
             url: "../controlador/unidadAdministrativa.php",
@@ -51,13 +54,14 @@ $(document).ready(function () {
                 console.log(response);
                 if(!isNaN(response)){
                     let listaResponsables = $("#editDepatamentoResponsable").val();
+                    // selectEditUA.reload();
+                    console.log(selectEditUA);
                     $.ajax({
                         type: "POST",
                         url: "../controlador/usuario_ua.php",
                         data: {metodo:'actualizarUsuarioUA',listaResponsables,idUA},
                         success: function (res) {
                             console.log(res);
-                            $('#myModal2').modal('hide');
                             if(!isNaN(res)){
                                 Swal.fire('Exito!!',"Se ha actualizado la unidad Administrativa",'success');
                             }else{
@@ -256,7 +260,7 @@ function actualizarUsuariosAdministrativos(){
                 $("#addDepatamentoResponsable").append("<option value="+element.id_usuario+">"+element.nombre+"</option>");
                 $("#editDepatamentoResponsable").append("<option value="+element.id_usuario+">"+element.nombre+"</option>");
             });
-            tail.select('#editDepatamentoResponsable',{
+            selectEditUA = tail.select('#editDepatamentoResponsable',{
                 locale: "es",
                 search: true,
                 multiLimit: 5,
@@ -265,7 +269,7 @@ function actualizarUsuariosAdministrativos(){
                 multiContainer: '.move-container2'
             });
 
-            selectEditUA = tail.select('#addDepatamentoResponsable',{
+            selectAddUA = tail.select('#addDepatamentoResponsable',{
                 locale: "es",
                 search: true,
                 multiLimit: 5,
@@ -294,7 +298,7 @@ function actualizarUsuariosAdministrativos(){
 }
 
 function listaDeUsuariosUA(idUsuarioUA){
-    console.log(idUsuarioUA);
+    //console.log(idUsuarioUA);
     $.ajax({
         type: "POST",
         url: "../controlador/usuario_ua.php",
@@ -302,14 +306,15 @@ function listaDeUsuariosUA(idUsuarioUA){
         success: function (response) {
             let listaUsuarios = JSON.parse(response);
             //console.log(listaUsuarios);
+            //selectEditUA.reload();
             listaUsuarios.forEach(element => {
                 //$("#editDepatamentoResponsable ul li[data-key="+element.id_usuario+"]").attr('selected','true'); 
                 //console.log(selectEditUA);
   //              console.log(element.id_usuario);
-                //selectEditUA.options.handle("select", element.id_usuario, '#');
+                //console.log(selectEditUA.options.selected);
                 $("#listaResponsablesAnt").append('<li>'+element.nombre+'</li>');
             });
-            
+            //selectEditUA.options.selected = Array();
         },
         error: function (){
             console.log("Error");
