@@ -12,9 +12,10 @@
                 $activoUA  = $_REQUEST['activoUA'];
                 $res = $unidadAdministrativa->actualizarUA($idUA,$nombreUA,$gestionUA,$activoUA);
                 break;
-            case 'bajaUA':
+            case 'cambioEstadoUA':
                 $idUnidadAdministrativa = $_REQUEST['idUA'];
-                $res = $unidadAdministrativa->bajaUA($idUnidadAdministrativa);
+                $cambioUA = $_REQUEST['cambioUA'];
+                $res = $unidadAdministrativa->cambioEstadoUA($idUnidadAdministrativa,$cambioUA);
                 break;
             case 'insertarUnidadAdministrativa':
                 $nombre = $_REQUEST['nombreUA']; 

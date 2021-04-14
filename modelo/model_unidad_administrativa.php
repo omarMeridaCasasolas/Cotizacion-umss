@@ -43,10 +43,10 @@
             return $res;
         } 
 
-        public function bajaUA($idUnidadAdministrativa){
-            $sql = "UPDATE unidad_administrativa SET activo_ua = false WHERE id_uni_admin = :id";
+        public function cambioEstadoUA($idUnidadAdministrativa,$cambioUA){
+            $sql = "UPDATE unidad_administrativa SET activo_ua = :estado WHERE id_uni_admin = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUnidadAdministrativa));
+            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUnidadAdministrativa, ":estado"=>$cambioUA));
             $sentenceSQL->closeCursor();
             return $respuesta;
         }

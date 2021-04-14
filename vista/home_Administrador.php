@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-group">
                                 <label for="addDepatamentoFacultad">Selecione Facultad</label>
-                                <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control">
+                                <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control" required>
                                     <option value="defaul">Ninguno</option>
                                 </select>
                                 <span class="text-darnger">* Facultadas sin asignacion</span>
@@ -89,12 +89,13 @@
                                     </select>
                                 </div> -->
                                 <label for="addDepatamentoResponsable">Seleccione responsable</label>
-                                    <select multiple  id="addDepatamentoResponsable">
+                                    <select multiple id="addDepatamentoResponsable">
                                         <!-- <option value="defaul">Ninguno</option>
                                         <option value="1">Ana Panozo Merida</option>
                                         <option value="2">Isabel Flores Castro</option>
                                         <option value="3">Carla Teran Andrade</option> -->
                                     </select>
+                                
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
@@ -103,6 +104,7 @@
                                 </div>
                             </div>
                         </div>
+                        <span class="text-danger" id="spanAddUA"></span>
                         <div class="move-container"></div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Crear">
@@ -120,7 +122,7 @@
             <div class="modal-content">
             <!-- Modal Header -->
                 <div class="modal-header bg-danger">
-                    <h4 class="modal-title">Dar de baja unidad Administrativa</h4>
+                    <h4 class="modal-title text-center">Cambiar estado de la Unidad Administrativa</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -128,9 +130,11 @@
                 <div class="modal-body">
                     <form action="" id="formBajaUnidadAcademica">
                         <input type="text" name="bajaUA" id="bajaUA" class="d-none">
-                        <h5>Desea dar de baja la unidad administrattiva: <strong id='bajaUANombre'>UA</strong>, desabilitara sus funciones maestras</h5>
+                        <input type="text" name="estadoUACambio" id="estadoUACambio" class="d-none">
+                        <h5 id="idTextEstado"></h5>
+                        <!-- <h5>Desea cambiar el estado de la : <strong id='bajaUANombre'>UA</strong>, desabilitara/habilara las tareas de los usuarios</h5> -->
                         <div class="text-center">
-                            <input type="submit" class="btn btn-primary" value="Baja">
+                            <input type="submit" class="btn btn-primary" value="Cambiar">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
                     </form>
@@ -156,7 +160,7 @@
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Nombre</label>
-                                <input type="text" name="editUANombre" id="editUANombre" class="form-control" required pattern="[0-9]{4}">
+                                <input type="text" name="editUANombre" id="editUANombre" class="form-control" required>
                             </div>
                             <div class="form-group col-4">
                                 <label for="">Gestion</label>
@@ -172,7 +176,7 @@
                             </div>
                             <div class="form-group col-4">
                                 <label for="">Estado:</label>
-                                <select class="form-control" id="editUAEstado">
+                                <select class="form-control" id="editUAEstado" disabled>
                                     <option value="true">Si</option>
                                     <option value="false">No</option>
                                 </select>

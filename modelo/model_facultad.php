@@ -19,7 +19,7 @@
         }
         public function getFacultadeSelect(){
             $sql = "SELECT id_facultad, nombre_facultad FROM facultad WHERE id_facultad NOT IN
-            (SELECT id_facultad FROM unidad_administrativa WHERE activo_ua = true)";
+            (SELECT id_facultad FROM unidad_administrativa)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

@@ -10,7 +10,9 @@ $(document).ready(function () {
     // });
     $("#tablaUnidadAdministrativa tbody").on('click','button.editUA ',function () {
         let dataEditUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
-        console.log(dataEditUA);
+        //console.log(dataEditUA);
+        $("#listaResponsablesAnt").empty();
+        listaDeUsuariosUA(dataEditUA.id_uni_admin);
         $("#editUAID").val(dataEditUA.id_uni_admin);
         $('#editUANombre').val(dataEditUA.nombre_ua);
         $("#editUAGestion").val(dataEditUA.gestion_ua);
@@ -18,13 +20,18 @@ $(document).ready(function () {
         $("#editUAFacultad").append("<option value="+dataEditUA.nombre_facultad.replace(/ /g, "")+" selected disabled>"+dataEditUA.nombre_facultad+"</option>");
         $("#editUAFacultad").val(dataEditUA.nombre_facultad.replace(/ /g, ""));
         $("#editUAEstado").val(String(dataEditUA.activo_ua));
-        listaDeUsuariosUA(dataEditUA.id_uni_admin);
     });
 
     $("#tablaUnidadAdministrativa tbody").on('click','button.bajaUA',function () {
         let dataBajaUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
-        // console.log(dataBajaUA);
+        console.log(dataBajaUA);
         $("#bajaUA").val(dataBajaUA.id_uni_admin);
+        $("#estadoUACambio").val(!dataBajaUA.activo_ua);
+        if(dataBajaUA.activo_ua){
+            $("#idTextEstado").html("Desea desactivar la <strong>"+dataBajaUA.nombre_ua+"</strong>, esto permitira desabilitar las funciones de sus usuarios");
+        }else{
+            $("#idTextEstado").html("Desea activar la <strong>"+dataBajaUA.nombre_ua+"</strong>, esto permitira habilitar las funciones de sus usuarios");
+        }
         //console.log(dataEditDirector);
         $('#bajaUANombre').html(dataBajaUA.nombre_ua);
     });
@@ -49,7 +56,6 @@ $(document).ready(function () {
                         url: "../controlador/usuario_ua.php",
                         data: {metodo:'actualizarUsuarioUA',listaResponsables,idUA},
                         success: function (res) {
-                            $('#formEditUnidadAcademica')[0].reset();
                             console.log(res);
                             $('#myModal2').modal('hide');
                             if(!isNaN(res)){
@@ -61,12 +67,13 @@ $(document).ready(function () {
                         }
                     });
                 }else{
-                    $('#formEditUnidadAcademica')[0].reset();
                     $('#myModal2').modal('hide');
                     Swal.fire('Problemas',response,'danger');
                 }
             }
         });
+        
+        $('#formEditUnidadAcademica')[0].reset();
     });
 
     $("#formBajaUnidadAcademica").submit(function (e) { 
@@ -74,11 +81,12 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "../controlador/unidadAdministrativa.php",
-            data: {metodo:'bajaUA',idUA:$("#bajaUA").val()},
+            data: {metodo:'cambioEstadoUA',idUA:$("#bajaUA").val(),cambioUA:$("#estadoUACambio").val()},
             success: function (response) {
                 if(!isNaN(response)){
                     //$('#myModal3').modal('hide');
-                    getUnidadesAdministrativa();
+                    //getUnidadesAdministrativa();
+                    tablaUnidadAdministrativa.ajax.reload();
                     actualizarFacultades();
                     //Swal.fire('¡Correcto!','Se Dio de baja la unidad, ahora se le puede asignar otra unidad Administrativa'+nombre,'success');  
                 }else{
@@ -92,51 +100,52 @@ $(document).ready(function () {
         e.preventDefault();    
     });
 
-    $("#formAddUnidadAcademica").submit(function (e) { 
-        e.preventDefault();
-        $('#myModal').modal('hide');
+    $("#formAddUnidadAcademica").submit(function (e) {
         let nombre = $("#addDepartamentoNombre").val().trim();
         let idFacultad = $("#addDepatamentoFacultad").val();
         let gestion = $("#addDepatamentoGestion").val().trim();
         let nombreFacultad = $('#addDepatamentoFacultad option:selected').text();
         let listaUsuario = $('#addDepatamentoResponsable').val();
-        //alert(listaUsuario);
-        //console.log(listaUsuario);
-        $.ajax({
-            type: "POST",
-            url: "../controlador/unidadAdministrativa.php",
-            data: {metodo:"insertarUnidadAdministrativa",nombreUA: nombre, idFacultadUA: idFacultad, gestionUA: gestion},
-            success: function (response) {
-                //console.log(response);
-                tablaUnidadAdministrativa.ajax.reload();
-                if(!isNaN(response)){
-                    $.ajax({
-                        type: "POST",
-                        url: "../controlador/usuario_ua.php",
-                        data: {metodo:"insertarUsuarioUA", listaUsuario, idUA: parseInt(response)},
-                        success: function (res) {
-                            console.log(res);
-                            if(!isNaN(res)){
-                                //getUnidadesAdministrativa();
-                                //$('#myModal').modal('hide');
-                                //tablaUnidadAdministrativa.row.add({"nombre_ua":nombre,"gestion_ua":gestion,"nombre_facultad":nombreFacultad,'activo_ua':'true'}).draw();
-                                //tablaUnidadAdministrativa.ajax.reload();
-                                Swal.fire('¡Exito!','Se ha agregado la unidad administrattiva '+nombre,'success');
-                                actualizarFacultades();
-                                $('#formAddUnidadAcademica')[0].reset();
-                            }else{
-                                Swal.fire('Problemas',res,'danger');
-//                      $('#myModal').modal('hide');  
+        if(listaUsuario.length == 0){
+            $("#spanAddUA").html("Seleccione almenos un usuario!!");
+        }else{
+            $("#spanAddUA").html("");
+            $('#myModal').modal('hide');
+            $.ajax({
+                type: "POST",
+                url: "../controlador/unidadAdministrativa.php",
+                data: {metodo:"insertarUnidadAdministrativa",nombreUA: nombre, idFacultadUA: idFacultad, gestionUA: gestion},
+                success: function (response) {
+                    //console.log(response);
+                    tablaUnidadAdministrativa.ajax.reload();
+                    if(!isNaN(response)){
+                        $.ajax({
+                            type: "POST",
+                            url: "../controlador/usuario_ua.php",
+                            data: {metodo:"insertarUsuarioUA", listaUsuario, idUA: parseInt(response)},
+                            success: function (res) {
+                                console.log(res);
+                                if(!isNaN(res)){
+                                    //getUnidadesAdministrativa();
+                                    //$('#myModal').modal('hide');
+                                    //tablaUnidadAdministrativa.row.add({"nombre_ua":nombre,"gestion_ua":gestion,"nombre_facultad":nombreFacultad,'activo_ua':'true'}).draw();
+                                    //tablaUnidadAdministrativa.ajax.reload();
+                                    Swal.fire('¡Exito!','Se ha agregado la unidad administrattiva '+nombre,'success');
+                                    actualizarFacultades();
+                                    $('#formAddUnidadAcademica')[0].reset();
+                                }else{
+                                    Swal.fire('Problemas',res,'danger');
+                                }
                             }
-                            
-                        }
-                    });
-                } 
-            },
-            error: function (){
-                console.log("Error");
-            }
-        });
+                        });
+                    } 
+                },
+                error: function (){
+                    console.log("Error");
+                }
+            });
+        }
+        e.preventDefault();
     });
 });
 
@@ -146,7 +155,7 @@ function actualizarFacultades(){
         url: "../controlador/facultad.php",
         data: {metodo:"getFacultadeSelect"},
         success: function (response) {
-            console.log(JSON.parse(response));
+            // console.log(JSON.parse(response));
             let listaFacultades = JSON.parse(response);
             //$("#addDepatamentoFacultad").append("<option value='null'>Ninguno</option>");
             $("#addDepatamentoFacultad").empty();
@@ -155,6 +164,9 @@ function actualizarFacultades(){
                 $("#addDepatamentoFacultad").append("<option value="+element.id_facultad+">"+element.nombre_facultad+"</option>");
                 //$("#editUAFacultad").append("<option value="+element.id_facultad+">"+element.nombre_facultad+"</option>");
             });
+            if($('#addDepatamentoFacultad option').length == 0){
+                $("#addDepatamentoFacultad").append("<option value=''>No existen facultades disponibles</option>");
+            }
         },
         error: function (){
             console.log("Error");
@@ -235,7 +247,7 @@ function actualizarUsuariosAdministrativos(){
         url: "../controlador/usuario.php",
         data: {metodo:"getUsuariosAdministrativos"},
         success: function (response) {
-            console.log(JSON.parse(response));
+            // console.log(JSON.parse(response));
             let listaUsuarios = JSON.parse(response);
             //$("#addDepatamentoFacultad").append("<option value='null'>Ninguno</option>");
             $("#addDepatamentoResponsable").empty();
@@ -295,7 +307,6 @@ function listaDeUsuariosUA(idUsuarioUA){
                 //console.log(selectEditUA);
   //              console.log(element.id_usuario);
                 //selectEditUA.options.handle("select", element.id_usuario, '#');
-                $("#listaResponsablesAnt").empty();
                 $("#listaResponsablesAnt").append('<li>'+element.nombre+'</li>');
             });
             
