@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="librerias/tail.select.css">
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -88,7 +91,7 @@
                                     </select>
                                 </div> -->
                                 <label for="addDepatamentoResponsable">Seleccione responsable</label>
-                                    <select multiple id="addDepatamentoResponsable">
+                                    <select multiple id="addDepatamentoResponsable" class="mul-select form-control" required>
                                         <!-- <option value="defaul">Ninguno</option>
                                         <option value="1">Ana Panozo Merida</option>
                                         <option value="2">Isabel Flores Castro</option>
@@ -188,13 +191,9 @@
                             </ul>
                         </div>
                         <div class="form-group">
-                            <label for="editDepatamentoResponsable">Seleccione responsable</label>
-                                <select multiple  id="editDepatamentoResponsable" class="form-control" required>
-                                            <!-- <option value="defaul">Ninguno</option>
-                                            <option value="1">Ana Panozo Merida</option>
-                                            <option value="2">Isabel Flores Castro</option>
-                                            <option value="3">Carla Teran Andrade</option> -->
-                                </select>
+                            <h6>Lista de usuarios:</h65>
+                            <select multiple  id="editDepatamentoResponsable" required class="mul-select form-control" style = "width:100%">
+                            </select>
                             </div>
                         <div class="move-container2"></div>
                         <div class="text-center">

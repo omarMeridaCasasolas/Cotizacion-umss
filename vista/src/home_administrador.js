@@ -4,15 +4,10 @@ $(document).ready(function () {
     actualizarFacultades();
     actualizarUsuariosAdministrativos();
 
-    // $("#btnRowAdd").click(function (e) { 
-    //     tablaUnidadAdministrativa.row.add({"nombre_ua":'aaa',"gestion_ua":'2020',"nombre_facultad":'bbb','activo_ua':'true'}).draw();
-    //     e.preventDefault();
-    // });
     $("#tablaUnidadAdministrativa tbody").on('click','button.editUA ',function () {
         let dataEditUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
-        //console.log(dataEditUA);
-        selectEditUA.reload();
         $("#listaResponsablesAnt").empty();
+        $("#editDepatamentoResponsable").select2("val", null);
         listaDeUsuariosUA(dataEditUA.id_uni_admin);
         $("#editUAID").val(dataEditUA.id_uni_admin);
         $('#editUANombre').val(dataEditUA.nombre_ua);
@@ -45,17 +40,14 @@ $(document).ready(function () {
         let idFacultad = $("#editUAFacultad").val();
         let gestionUA = $("#editUAGestion").val().trim();
         let activoUA = $("#editUAEstado").val();
+        let listaResponsables = $("#editDepatamentoResponsable").val();
         $('#myModal2').modal('hide');
         $.ajax({
             type: "POST",
             url: "../controlador/unidadAdministrativa.php",
             data: {metodo: 'actualizarUA',idUA,nombreUA,idFacultad,gestionUA,activoUA},
             success: function (response) {
-                console.log(response);
                 if(!isNaN(response)){
-                    let listaResponsables = $("#editDepatamentoResponsable").val();
-                    // selectEditUA.reload();
-                    console.log(selectEditUA);
                     $.ajax({
                         type: "POST",
                         url: "../controlador/usuario_ua.php",
@@ -260,36 +252,14 @@ function actualizarUsuariosAdministrativos(){
                 $("#addDepatamentoResponsable").append("<option value="+element.id_usuario+">"+element.nombre+"</option>");
                 $("#editDepatamentoResponsable").append("<option value="+element.id_usuario+">"+element.nombre+"</option>");
             });
-            selectEditUA = tail.select('#editDepatamentoResponsable',{
-                locale: "es",
-                search: true,
-                multiLimit: 5,
-                hideSelect: true,
-                hideDisabled: true,
-                multiContainer: '.move-container2'
+            $('#addDepatamentoResponsable').select2({
+                placeholder: "Selecione a los usuarios",
+                tags: true
             });
-
-            selectAddUA = tail.select('#addDepatamentoResponsable',{
-                locale: "es",
-                search: true,
-                multiLimit: 5,
-                hideSelect: true,
-                hideDisabled: true,
-                multiContainer: '.move-container'
+            $('#editDepatamentoResponsable').select2({
+                placeholder: "Selecione a los usuarios",
+                tags: true
             });
-
-            // $("#editDepatamentoResponsable").empty();
-            // listaUsuarios.forEach(element => {
-            //     $("#editDepatamentoResponsable").append("<option value="+element.id_usuario+">"+element.nombre+"</option>");
-            // });
-            // tail.select('#editDepatamentoResponsable',{
-            //     locale: "es",
-            //     search: true,
-            //     multiLimit: 5,
-            //     hideSelect: true,
-            //     hideDisabled: true,
-            //     multiContainer: '.move-container2'
-            // });
         },
         error: function (){
             console.log("Error");
@@ -305,16 +275,15 @@ function listaDeUsuariosUA(idUsuarioUA){
         data: {metodo:"listaUsuariosUA",idUA:idUsuarioUA},
         success: function (response) {
             let listaUsuarios = JSON.parse(response);
-            //console.log(listaUsuarios);
-            //selectEditUA.reload();
+            myArregloEdit = new Array();
             listaUsuarios.forEach(element => {
-                //$("#editDepatamentoResponsable ul li[data-key="+element.id_usuario+"]").attr('selected','true'); 
-                //console.log(selectEditUA);
-  //              console.log(element.id_usuario);
-                //console.log(selectEditUA.options.selected);
+                //console.log(element.id_usuario);
                 $("#listaResponsablesAnt").append('<li>'+element.nombre+'</li>');
+                myArregloEdit.push(element.id_usuario);
             });
             //selectEditUA.options.selected = Array();
+            $("#editDepatamentoResponsable").val(myArregloEdit);
+            $('#editDepatamentoResponsable').trigger('change');
         },
         error: function (){
             console.log("Error");
