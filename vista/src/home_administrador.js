@@ -1,8 +1,21 @@
 let tablaUnidadAdministrativa, selectEditUA , selectAddUA ;
+
+function obtenerTablas(){
+    let datos = new Array();
+    let aux = tablaUnidadAdministrativa.column(0).data();
+    console.log(aux.length);
+    for(let i = 0; i < aux.length ; i++){
+        datos.push(aux[i]);
+    }  
+    console.log(datos);
+}
+
 $(document).ready(function () {
     getUnidadesAdministrativa();
     actualizarFacultades();
-    actualizarUsuariosAdministrativos();
+    actualizarUsuariosAdministrativos(obtenerTablas);
+    //obtenerTablas();
+    
 
     $("#tablaUnidadAdministrativa tbody").on('click','button.editUA ',function () {
         let dataEditUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
@@ -68,7 +81,6 @@ $(document).ready(function () {
                 }
             }
         });
-        
         $('#formEditUnidadAcademica')[0].reset();
     });
 
@@ -170,7 +182,7 @@ function actualizarFacultades(){
     });
 }
 
-function getUnidadesAdministrativa(){
+function getUnidadesAdministrativa(callBack){
     $('#tablaUnidadAdministrativa').dataTable().fnDestroy();
     tablaUnidadAdministrativa = $("#tablaUnidadAdministrativa").DataTable({
         responsive: true,
@@ -233,8 +245,10 @@ function getUnidadesAdministrativa(){
               "<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-sync'></i></button>",
             width: "15%",
           },
-        ],
+        ]
     });
+    //callBack();
+    if(callback) callback();
 }
 
 function actualizarUsuariosAdministrativos(){
@@ -290,3 +304,4 @@ function listaDeUsuariosUA(idUsuarioUA){
         }
     });
 }
+
