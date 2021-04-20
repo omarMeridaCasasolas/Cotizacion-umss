@@ -19,20 +19,21 @@
 </head>
 <body class="bg-secondary my-5">
     <main class="container bg-light rounded p-3">
-            <form action="controlador/verificarUsuario.php" method="POST">
+        <form action="controlador/verificarUsuario.php" method="POST" class="container">
             <h1 class="text-center">Validar Usuario</h1>
-            <div class="form-group">
-                <label for="user"></label>
+            <div class="form-group mx-5">
+                <label for="user">Correo Electronicio</label>
                 <input type="mail" name="user" class="form-control" id="user" required>
             </div>
-            <div class="form-group">
-                <label for="pass"></label>
+            <div class="form-group mx-5">
+                <label for="pass">Contraseña</label>
                 <input type="password" name="pass" class="form-control" id="pass" required>
             </div>
-            <div class="text-center">
+            <div class="text-center my-3">
                 <input type="submit" value="Ingresar" class="btn btn-primary">
             </div>
         </form>
+        <a href="">¿Te olvidaste tu contraseña?</a>
     </main>
 </body>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

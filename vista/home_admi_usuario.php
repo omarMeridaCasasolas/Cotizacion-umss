@@ -1,5 +1,10 @@
 <?php 
     session_start();
+    if(isset($_SESSION["nombreUsuario"])){
+
+    }else{
+         header("Location:../index.php");
+     }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,15 +38,19 @@
         <a class="nav-link" href="home_administrador.php">Unidad Administrativa</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#">Unidad de gastos</a>
+        <a class="nav-link" href="home_admi_gastos.php">Unidad de gastos</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="home_admi_usuario.php">Usuarios</a>
         </li>
     </ul>
+    <div class="float-right py-3">
+        <a href="../controlador/formCerrarSession.php" class="btn btn-primary float-right" title="Cerrar Session"><i class="fas fa-sign-out-alt"></i></a>
+                <br>
+        </div>
     </nav>
     <main class="container bg-light rounded-lg border p-2">
-        <h1 class="text-primary text-center">LIsta de usuarios</h1>
+        <h1 class="text-primary text-center">Lista de usuarios</h1>
         <div class="m-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Usuario</button>
         </div>
