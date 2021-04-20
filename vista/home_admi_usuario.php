@@ -35,7 +35,7 @@
     <!-- Links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-        <a class="nav-link" href="home_administrador.php">Unidad Administrativa</a>
+        <a class="nav-link" href="home_Administrador.php">Unidad Administrativa</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="home_admi_gastos.php">Unidad de gastos</a>
