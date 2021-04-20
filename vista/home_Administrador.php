@@ -23,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="estiasdasf">
     <!-- Brand/logo -->
     <a class="navbar-brand" href="#"><h2>Bienvenido <?php echo $_SESSION['nombreUsuario'];?></h2></a>
     
@@ -45,7 +45,7 @@
         <div class="m-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Unidad Administrativa</button>
         </div>
-        <table class="display" id="tablaUnidadAdministrativa">
+        <table class="display" id="tablaUsuario">
             <thead>
                 <tr class="bg-info">
                     <th>Nombre Unidad</th>
@@ -75,6 +75,7 @@
                         <div class="form-group">
                             <label for="addDepartamentoNombre">Nombre Departamento:</label>
                             <input type="text" name="addDepartamentoNombre" id="addDepartamentoNombre" class="form-control" required>
+                            <span class="text-danger" id="spanNomDep"></span>
                         </div>
                         <div class="form-group">
                                 <label for="addDepatamentoFacultad">Selecione Facultad</label>
@@ -159,10 +160,12 @@
                 <div class="modal-body">
                     <form action="" id="formEditUnidadAcademica">
                         <input type="text" name="editUAID" id="editUAID" class="d-none">
+                        <input type="text" name="editUANomAnt" id="editUANomAnt" class="d-none">
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Nombre</label>
                                 <input type="text" name="editUANombre" id="editUANombre" class="form-control" required>
+                                <span id="spanNomEditDep" class="text-danger"></span>
                             </div>
                             <div class="form-group col-4">
                                 <label for="">Gestion</label>

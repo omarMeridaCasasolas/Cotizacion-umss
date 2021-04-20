@@ -4,7 +4,52 @@
         $metodo = $_REQUEST['metodo'];
         $user = new User();
         $res ="";
-        switch ($metodo) {  
+        switch ($metodo) { 
+            case 'actualizarUsuarioTipo':
+                $idTipo=$_REQUEST['idTipo'];
+                $editUsuarioRol=$_REQUEST['editUsuarioRol'];
+                $res = $user->actualizarUsuarioTipo($idTipo,$editUsuarioRol);
+                break;
+            case 'actualizarUsuario':
+                $id=$_REQUEST['id'];
+                $correo=$_REQUEST['correo'];
+                $telefono=$_REQUEST['telefono'];
+                $res = $user->actualizarUsuario($id,$correo,$telefono);
+                break;
+            case 'obtenerRolesAjenos':
+                $idUser=$_REQUEST['idUser'];
+                $res = $user->obtenerRolesAjenos($idUser);
+                break;
+            case 'cambioEstadoUsuario':
+                $idUserRol=$_REQUEST['idUserRol'];
+                $cambioUserRol=$_REQUEST['cambioUserRol'];
+                $res = $user->cambioEstadoUsuario($idUserRol,$cambioUserRol);
+                break;
+            case 'insertarUsuarioRol':
+                $idUsuario = $_REQUEST['idUsuario'];
+                $listaRoles = $_REQUEST['listaRoles'];
+                foreach ($listaRoles as $rol) {
+                    $res = $user->insertarUsuarioRol($idUsuario,$rol);
+                    if($res != 1){
+                        break;
+                    }
+                }
+                break;  
+            case 'insertarUsuario':
+                $nombre=$_REQUEST['nombre'];
+                $apellido=$_REQUEST['apellido'];
+                $ci=$_REQUEST['ci'];
+                $pass=$_REQUEST['pass'];
+                $correo=$_REQUEST['correo'];
+                $telefono=$_REQUEST['telefono'];
+                $res = $user->insertarUsuario($nombre,$apellido,$ci,$pass,$correo,$telefono);
+                break;
+            case 'getListaRoles':
+                $res = $user->getListaRoles();
+                break;
+            case 'getUsuaurios':
+                $res = $user->getUsuaurios();
+                break;
             case 'getUsuariosAdministrativos':
                 $res = $user->getUsuariosAdministrativos();
                 break;
