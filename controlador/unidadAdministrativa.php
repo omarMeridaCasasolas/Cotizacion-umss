@@ -3,7 +3,7 @@
     if(isset($_REQUEST['metodo'])){
         $metodo = $_REQUEST['metodo'];
         $unidadAdministrativa = new UnidadAdministrativa();
-        $res ="";
+        $res ="Metodo no encontrado";
         switch ($metodo) { 
             case 'actualizarUA':
                 $idUA = $_REQUEST['idUA'];
@@ -18,10 +18,12 @@
                 $res = $unidadAdministrativa->cambioEstadoUA($idUnidadAdministrativa,$cambioUA);
                 break;
             case 'insertarUnidadAdministrativa':
-                $nombre = $_REQUEST['nombreUA']; 
-                $idFacultad = $_REQUEST['idFacultadUA'];
-                $gestion = $_REQUEST['gestionUA'];
-                $res = $unidadAdministrativa->insertarUnidadAdministrativa($nombre,$idFacultad,$gestion);
+                $nombre = $_REQUEST['nombre']; 
+                $idFacultad = $_REQUEST['idFacultad'];
+                $fecha = $_REQUEST['fecha'];
+                $usuario  = $_REQUEST['usuario'];
+                $telefono  = $_REQUEST['telefono'];
+                $res = $unidadAdministrativa->insertarUnidadAdministrativa($nombre,$idFacultad,$fecha,$usuario,$telefono);
                 break;
             case 'getUnidadAdministrativa':
                 $res = $unidadAdministrativa->getUnidadAdministrativa();

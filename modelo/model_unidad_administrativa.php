@@ -19,7 +19,7 @@
         }
 
         public function getUnidadAdministrativa(){
-            $sql = "SELECT id_uni_admin, nombre_ua, gestion_ua, nombre_facultad, activo_ua FROM 
+            $sql = "SELECT id_uni_admin, nombre_ua,id_usuario, fecha_ua, unidad_administrativa.id_facultad ,nombre_facultad, telefono_ua, activo_ua FROM 
             unidad_administrativa INNER JOIN facultad ON facultad.id_facultad = unidad_administrativa.id_facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
@@ -27,19 +27,11 @@
             $sentenceSQL->closeCursor();
             echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
-        public function insertarUnidadAdministrativa($nombre,$idFacultad,$gestion){
-            $sql = "INSERT INTO unidad_administrativa (nombre_ua, id_facultad, gestion_ua, activo_ua) VALUES(:nombre,:idFacultad,:gestion,true)";
+        public function insertarUnidadAdministrativa($nombre,$idFacultad,$fecha,$usuario,$telefono){
+            $sql = "INSERT INTO unidad_administrativa (nombre_ua,id_usuario ,id_facultad, fecha_ua,telefono_ua, activo_ua) VALUES(:nombre,:usuario,:idFacultad,:fecha,:telef,true)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":idFacultad"=>$idFacultad,":gestion"=>$gestion));
-            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            if($res == 1 || $res == true){
-                $res = $this->connexion_bd->lastInsertId();
-                $string = preg_replace("/[\r\n|\n|\r]+/", PHP_EOL, $res);
-                $sentenceSQL->closeCursor();
-                return $string;
-            }
+            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":idFacultad"=>$idFacultad,":fecha"=>$fecha,":usuario"=>$usuario,":telef"=>$telefono));
             $sentenceSQL->closeCursor();
-            //$res = json_encode($respuesta);
             return $res;
         } 
 

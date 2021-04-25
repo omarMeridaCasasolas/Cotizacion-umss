@@ -1,9 +1,9 @@
 <?php 
     session_start();
-    if(isset($_SESSION["nombreUsuario"])){
-    }else{
-         header("Location:../index.php");
-     }
+    // if(isset($_SESSION["nombreUsuario"])){
+    // }else{
+    //      header("Location:../index.php");
+    //  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,15 +49,15 @@
         </div>
     </nav>
     <main class="container bg-light rounded-lg border p-2">
-        <h1 class="text-primary text-center">Unidades Administrativas</h1>
+        <h1 class="text-primary text-center">Facultades</h1>
         <div class="m-3">
-            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Unidad Administrativa</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Facultad</button>
         </div>
-        <table class="display" id="tablaUsuario">
+        <table class="display" id="tablaFacultad">
             <thead>
                 <tr class="bg-info">
-                    <th>Nombre Unidad</th>
-                    <th>Facultad</th>
+                    <th>Nombre Facultad</th>
+                    <th>Sigla</th>
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>Opciones</th>
@@ -73,45 +73,41 @@
             <div class="modal-content">
             <!-- Modal Header -->
                 <div class="modal-header bg-success">
-                    <h4 class="modal-title">Crear Unidad Administrativa</h4>
+                    <h4 class="modal-title">Crear Facultad</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form action="" id="formAddUnidadAcademica">
-                        <div class="form-group">
-                            <label for="addDepartamentoNombre">Nombre Unidad Administrativa:</label>
-                            <input type="text" name="addDepartamentoNombre" id="addDepartamentoNombre" class="form-control" required>
-                            <span class="text-danger" id="spanNomDep"></span>
-                        </div>
+                    <form action="" id="formAddFacultad">
                         <div class="row">
                             <div class="form-group col-8">
-                                <label for="addDepatamentoFacultad">Seleccione Facultad:</label>
-                                <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control" required>
-                                    <option value="Ninguno">Ninguno</option>
-                                </select>
-                                <span class="text-danger" id="spanDepFac"></span>
+                                <label for="addFacultadNombre">Nombre facultad:</label>
+                                <input type="text" id="addFacultadNombre" class="form-control" required>
+                                <span class="text-danger" id="spanNombreFac"></span>
                             </div>
                             <div class="form-group col-4">
-                                <label for="addDepatamentoTelef">Telefono:</label>
-                                <input type="text" name="" id="addDepatamentoTelef" class="form-control" required>
+                                <label for="addFacultadSigla">Sigla:</label>
+                                <input type="text" id="addFacultadSigla" class="form-control" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-8">
-                                <label for="addDepatamentoResponsable">Seleccione responsable:</label>
-                                    <select id="addDepatamentoResponsable" class="form-control" required>
-                                    </select> 
-                                <span class="text-danger" id="spanAddUA"></span>                               
+                            <div class="form-group col-7">
+                                <label for="addGestionFacultad">Tipo Gestion</label>
+                                <select name="addGestionFacultad" id="addGestionFacultad" class="form-control" required>
+                                    <option value="default">Ninguno</option>
+                                    <option value="Semestral">Semestral</option>
+                                    <option value="Anual">Anual</option>
+                                </select>
+                                <span class="text-danger" id="spanGestionFac"></span>
                             </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="addDepatamentoFecha">Fecha:</label>
-                                    <input type="date" class="form-control" id="addDepatamentoFecha" required value="<?php echo date("Y-m-d");?>" disabled>
-                                </div>
+                            <div class="form-group col-5">
+                                <label for="addFechaFacultad">fecha:</label>
+                                <input type="date" id="addFechaFacultad" class="form-control" required value="<?php echo date("Y-m-d");?>" disabled>                            
+                                <span class="text-danger" id="spanNomDep"></span>
                             </div>
                         </div>
+                        <span class="text-danger" id="spanAddUA"></span>
                         <div class="move-container"></div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Crear">
@@ -172,14 +168,14 @@
                                 <span id="spanNomEditDep" class="text-danger"></span>
                             </div>
                             <div class="form-group col-4">
-                                <label for="editUAFecha">Fecha:</label>
-                                <input type="text"  id="editUAFecha" class="form-control" disabled>
+                                <label for="">Gestion</label>
+                                <input type="text" name="editUAGestion" id="editUAGestion" class="form-control" required pattern="[0-9]{4}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Facultad:</label>
-                                <select class="form-control" id="editUAFacultad" required>
+                                <select class="form-control" id="editUAFacultad">
                                     <!-- <option value="" selected disabled>Facultad de Z</option> -->
                                 </select>
                             </div>
@@ -191,17 +187,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-8">
-                                <label for="">Responsable:</label>
-                                <select  id="editDepatamentoResponsable" required class="form-control">
-                                </select>
-                            </div>
-                            <div class="form-group col-4">
-                                <label for="editUATelef">Telefono:</label>
-                                <input type="text"  id="editUATelef" class="form-control">
-                            </div>
+                        <div class="">
+                            <h4 class="text-primary">Lista de responsables anteriorres:</h4>
+                            <ul id="listaResponsablesAnt">
+                            
+                            </ul>
                         </div>
+                        <div class="form-group">
+                            <h6>Lista de usuarios:</h65>
+                            <select multiple  id="editDepatamentoResponsable" required class="mul-select form-control" style = "width:100%">
+                            </select>
+                            </div>
+                        <div class="move-container2"></div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Actualizar">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -215,5 +212,5 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="librerias/tail.select.js"></script>
-    <script src="src/home_administrador.js"></script>
+    <script src="src/home_facultades.js"></script>
 </html>

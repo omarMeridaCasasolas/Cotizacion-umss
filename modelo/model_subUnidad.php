@@ -1,105 +1,24 @@
 <?php
     require_once("conexion.php");
-    class User extends Conexion{
+    class SubUnidad extends Conexion{
         private $sentenceSQL;
-        public function User(){
+        public function SubUnidad(){
             parent::__construct();
         }
         public function cerrarConexion(){
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
-        public function getResponsableDisponiblesUA(){
-            
-        }
-
-        public function actualizarUsuarioTipo($idTipo,$editUsuarioRol){
-            $sql = "UPDATE usuario_tipo SET  role = :rol WHERE id_role_usuario = :id";
+        public function getSubUnidad($idUA){
+            $sql = "SELECT * FROM subunidad WHERE  id_uni_admin = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":rol"=>$editUsuarioRol,":id"=>$idTipo));
-            $sentenceSQL->closeCursor();
-            return $res;
-        }
-        public function actualizarUsuario($id,$correo,$telefono){
-            $sql = "UPDATE usuario SET login_usuario = :correo, telef_usuario = :telef WHERE id_usuario = :id";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":correo"=>$correo,":telef"=>$telefono,":id"=>$id));
-            $sentenceSQL->closeCursor();
-            return $res;
-        }
-        public function obtenerRolesAjenos($idUser){
-            $sql = "SELECT DISTINCT(role) FROM usuario_tipo WHERE role <> 'Administrador' AND role NOT IN 
-            (SELECT DISTINCT (role) FROM usuario_tipo WHERE id_usuario = :id)";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL->execute(array(":id"=>$idUser));
-            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            $sentenceSQL->closeCursor();
-            return json_encode($respuesta);
-        }
-
-        public function cambioEstadoUsuario($idUserRol,$cambioUserRol){
-            $sql = "UPDATE usuario_tipo SET rol_activo = :cambio WHERE id_role_usuario = :id";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":cambio"=>$cambioUserRol,":id"=>$idUserRol));
-            $sentenceSQL->closeCursor();
-            return $res;
-        }
-
-        public function insertarUsuarioRol($idUsuario,$rol){
-            $sql = "INSERT INTO usuario_tipo (id_usuario, role, rol_activo) VALUES(:idUsuario,:rol,true)";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":idUsuario"=>$idUsuario,":rol"=>$rol));
-            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            $sentenceSQL->closeCursor();
-            //$res = json_encode($respuesta);
-            return $res;
-        }
-
-        public function insertarUsuario($nombre,$apellido,$ci,$pass,$correo,$telefono){
-            $sql = "INSERT INTO usuario(nombre_usuario, apellido_usuario,ci_usuario,pass_usuario,login_usuario,telef_usuario)
-            VALUES(:nombre,:apellido,:ci,:pass,:correo,:telef)";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":apellido"=>$apellido,":ci"=>$ci,":pass"=>$pass,":correo"=>$correo,":telef"=>$telefono));
-            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            if($res == 1 || $res == true){
-                $res = $this->connexion_bd->lastInsertId();
-                $string = preg_replace("/[\r\n|\n|\r]+/", PHP_EOL, $res);
-                $sentenceSQL->closeCursor();
-                return $string;
-            }
-            $sentenceSQL->closeCursor();
-            //$res = json_encode($respuesta);
-            return $res;
-        }
-        public function getListaRoles(){ 
-            $sql = "SELECT DISTINCT(role) FROM usuario_tipo WHERE role<>'Administrador'";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute();
-            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            $sentenceSQL->closeCursor();
-            return json_encode($respuesta);
-        }
-        public function getUsuaurios(){
-            $sql = "SELECT id_role_usuario, usuario_tipo.role, usuario.id_usuario, login_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre, telef_usuario, rol_activo
-            FROM usuario INNER JOIN usuario_tipo ON usuario.id_usuario = usuario_tipo.id_usuario  WHERE usuario.id_usuario 
-            IN (SELECT id_usuario FROM usuario_tipo WHERE role <>'Administrador'); ";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute();
+            $sentenceSQL-> execute(array(":id"=>$idUA));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
             echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
-        public function obtenerUsuario($user,$pass){
-            $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
-            $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
-            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
-            $sentenceSQL->closeCursor();
-            return $respuesta[0];
-        }
-        public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+        public function getFacultadeSelect(){
+            $sql = "SELECT id_facultad, nombre_facultad FROM facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

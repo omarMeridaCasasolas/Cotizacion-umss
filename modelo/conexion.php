@@ -3,7 +3,7 @@
         protected $connexion_bd;
         public function Conexion(){
             try {
-                $this->connexion_bd = new PDO("pgsql:host=165.232.139.233;port=5432;dbname=SAPCotizacionesTIS","postgres","");
+                $this->connexion_bd = new PDO("pgsql:host=129.151.100.42;port=5432;dbname=cotizacion","omar","js77Hi1JhG76GKp");
                 //Lo mas importante
                 $this->connexion_bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 return $this->connexion_bd;

@@ -3,8 +3,11 @@
     if(isset($_REQUEST['metodo'])){
         $metodo = $_REQUEST['metodo'];
         $user = new User();
-        $res ="";
+        $res ="Metodo no existe";
         switch ($metodo) { 
+            case 'getResponsableDisponiblesUA':
+                $res = $user->getResponsableDisponiblesUA();
+                break;
             case 'actualizarUsuarioTipo':
                 $idTipo=$_REQUEST['idTipo'];
                 $editUsuarioRol=$_REQUEST['editUsuarioRol'];

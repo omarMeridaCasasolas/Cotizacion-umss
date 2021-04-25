@@ -3,7 +3,7 @@
     if(isset($_REQUEST['metodo'])){
         $metodo = $_REQUEST['metodo'];
         $facultad = new Facultad();
-        $res ="";
+        $res ="metodo no funcionando";
         switch ($metodo) { 
             case 'getFacultades':
                 $res = $facultad->getFacultades();

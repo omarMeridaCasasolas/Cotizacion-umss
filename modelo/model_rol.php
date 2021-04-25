@@ -10,7 +10,8 @@
             $this->connexion_bd=null;
         } 
         public function getRolUsuario($idUsuario){
-            $sql = "SELECT * FROM usuario_tipo WHERE id_usuario = :id";
+            $sql = "SELECT role, nombre_ua, ut.id_usuario, id_facultad, rol_activo, id_uni_admin  FROM usuario_tipo 
+            as ut JOIN unidad_administrativa as ua ON ut.id_usuario = ua.id_usuario  WHERE ut.id_usuario = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute(array(":id"=>$idUsuario));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

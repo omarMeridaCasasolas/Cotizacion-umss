@@ -1,6 +1,7 @@
-<?php 
+<?php
     session_start();
     if(isset($_SESSION["nombreUsuario"])){
+
     }else{
          header("Location:../index.php");
      }
@@ -22,25 +23,22 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="librerias/tail.select.css">
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="estiasdasf">
     <!-- Brand/logo -->
-    <a class="navbar-brand" href="#"><h2>Bienvenido <?php echo $_SESSION['nombreUsuario'];?></h2></a>
-    
+    <a class="navbar-brand" href="sub_unidadUA.php"><h2>Bienvenido <?php echo $_SESSION['nombreUsuario'];?></h2></a>
+    <input type="text" name="" id="identUA" class="d-none" value="<?php echo $_SESSION['idUA'];?>" >
     <!-- Links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-        <a class="nav-link" href="home_Administrador.php">Unidad Administrativa</a>
+        <a class="nav-link" href="sub_ua.php">Sub unidades</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="home_admi_gastos.php">Unidad de gastos</a>
+        <a class="nav-link" href="colaborador.php">Colababoradores</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="home_admi_usuario.php">Usuarios</a>
+        <a class="nav-link" href="sub_usuario.php">Usuarios</a>
         </li>
     </ul>
     <div class="float-right py-3">
@@ -48,17 +46,30 @@
                 <br>
         </div>
     </nav>
+
+
+
     <main class="container bg-light rounded-lg border p-2">
-        <h1 class="text-primary text-center">Unidades Administrativas</h1>
+        <h1 class="text-primary text-center">Sub Unidades Administrativas</h1>
+        <!-- <form action="" id="formGetSubUnidades" class="d-none">
+            <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+                <div class="form-group">
+                    <label for="obtenerUA">Selecione la unidad Adminstrativa</label>
+                    <select name="" id="obtenerUA" class="form-control">
+                        <option value="Ninguno">Ninguno</option>
+                    </select>
+                </div>
+                <div class="text-center"><input type="submit" value="Obetner" class="btn btn-secondary"></div>
+            </div>
+        </form> -->
         <div class="m-3">
-            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Unidad Administrativa</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalUG">Sub unidades</button>
         </div>
-        <table class="display" id="tablaUsuario">
+        <table class="display" id="tablaSubUnidad">
             <thead>
                 <tr class="bg-info">
                     <th>Nombre Unidad</th>
-                    <th>Facultad</th>
-                    <th>Fecha</th>
+                    <th>fecha</th>
                     <th>Estado</th>
                     <th>Opciones</th>
                 </tr>
@@ -66,53 +77,36 @@
         </table>
     </main>
 
+
+
     <!-- modales -->
     <!-- The Modal Agregar departamento-->
-    <div class="modal fade" id="myModal">
+    <div class="modal fade" id="modalUG">
         <div class="modal-dialog">
             <div class="modal-content">
             <!-- Modal Header -->
                 <div class="modal-header bg-success">
-                    <h4 class="modal-title">Crear Unidad Administrativa</h4>
+                    <h4 class="modal-title">Crear Unidad - Departamento</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form action="" id="formAddUnidadAcademica">
+                    <form action="" id="formAddUG">
                         <div class="form-group">
-                            <label for="addDepartamentoNombre">Nombre Unidad Administrativa:</label>
-                            <input type="text" name="addDepartamentoNombre" id="addDepartamentoNombre" class="form-control" required>
-                            <span class="text-danger" id="spanNomDep"></span>
+                            <label for="addNombreSubUnidad">Nombre Departamento:</label>
+                            <input type="text" id="addNombreSubUnidad" class="form-control" required>
                         </div>
                         <div class="row">
-                            <div class="form-group col-8">
-                                <label for="addDepatamentoFacultad">Seleccione Facultad:</label>
-                                <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control" required>
-                                    <option value="Ninguno">Ninguno</option>
-                                </select>
-                                <span class="text-danger" id="spanDepFac"></span>
+                            <div class="form-group col-7">
+                                <label for="addResponsableSubUnidad">Responsable:</label>
+                                <select name="" id="addResponsableSubUnidad" class="form-control"></select>
                             </div>
-                            <div class="form-group col-4">
-                                <label for="addDepatamentoTelef">Telefono:</label>
-                                <input type="text" name="" id="addDepatamentoTelef" class="form-control" required>
+                            <div class="form-group col-5">
+                                <label for="addFechaSubUnidad">Fecha:</label>
+                                <input type="date" id="addFechaSubUnidad" value="<?php echo date("Y-m-d");?>" disabled>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <label for="addDepatamentoResponsable">Seleccione responsable:</label>
-                                    <select id="addDepatamentoResponsable" class="form-control" required>
-                                    </select> 
-                                <span class="text-danger" id="spanAddUA"></span>                               
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="addDepatamentoFecha">Fecha:</label>
-                                    <input type="date" class="form-control" id="addDepatamentoFecha" required value="<?php echo date("Y-m-d");?>" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="move-container"></div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Crear">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -123,23 +117,24 @@
         </div>
     </div>
 
+
     <!-- MODAL PARA DAR DE BAJA -->
     <div class="modal fade" id="myModal3">
         <div class="modal-dialog">
             <div class="modal-content">
             <!-- Modal Header -->
                 <div class="modal-header bg-danger">
-                    <h4 class="modal-title text-center">Cambiar estado de la Unidad Administrativa</h4>
+                    <h4 class="modal-title text-center">Cambiar estado de la Unidad De Gastos</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
                     <form action="" id="formBajaUnidadAcademica">
-                        <input type="text" name="bajaUA" id="bajaUA" class="d-none">
-                        <input type="text" name="estadoUACambio" id="estadoUACambio" class="d-none">
+                        <input type="text" name="bajaUG" id="bajaUG" class="d-none">
+                        <input type="text" name="estadoUGCambio" id="estadoUGCambio" class="d-none">
                         <h5 id="idTextEstado"></h5>
-                        <!-- <h5>Desea cambiar el estado de la : <strong id='bajaUANombre'>UA</strong>, desabilitara/habilara las tareas de los usuarios</h5> -->
+                        <!-- <h5>Desea cambiar el estado de la : <strong id='bajaUGNombre'>UA</strong>, desabilitara/habilara las tareas de los usuarios</h5> -->
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Cambiar">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -150,58 +145,61 @@
         </div>
     </div>
 
-    <!-- MODAL PARA EDITAR -->
-    <div class="modal fade" id="myModal2">
+
+
+
+        <!-- MODAL PARA EDITAR -->
+        <div class="modal fade" id="myModal2">
         <div class="modal-dialog">
             <div class="modal-content">
             <!-- Modal Header -->
                 <div class="modal-header bg-warning">
-                    <h4 class="modal-title">Editar Unidad Administrativa</h4>
+                    <h4 class="modal-title">Editar Unidad de Gastos</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
                     <form action="" id="formEditUnidadAcademica">
-                        <input type="text" name="editUAID" id="editUAID" class="d-none">
-                        <input type="text" name="editUANomAnt" id="editUANomAnt" class="d-none">
+                        <input type="text" name="editUGID" id="editUGID" class="d-none">
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Nombre</label>
-                                <input type="text" name="editUANombre" id="editUANombre" class="form-control" required>
-                                <span id="spanNomEditDep" class="text-danger"></span>
+                                <input type="text" name="editUGNombre" id="editUGNombre" class="form-control" required>
                             </div>
-                            <div class="form-group col-4">
-                                <label for="editUAFecha">Fecha:</label>
-                                <input type="text"  id="editUAFecha" class="form-control" disabled>
-                            </div>
+
                         </div>
                         <div class="row">
                             <div class="form-group col-8">
-                                <label for="">Facultad:</label>
-                                <select class="form-control" id="editUAFacultad" required>
+                                <label for="">Nivel:</label>
+                                <select class="form-control" id="editUGFacultad">
                                     <!-- <option value="" selected disabled>Facultad de Z</option> -->
                                 </select>
                             </div>
-                            <div class="form-group col-4">
+                            <!-- <div class="form-group col-4">
                                 <label for="">Estado:</label>
-                                <select class="form-control" id="editUAEstado" disabled>
+                                <select class="form-control" id="editUGEstado" disabled>
                                     <option value="true">Si</option>
                                     <option value="false">No</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
-                        <div class="row">
-                            <div class="form-group col-8">
-                                <label for="">Responsable:</label>
-                                <select  id="editDepatamentoResponsable" required class="form-control">
+                        <div class="">
+                            <h4 class="text-primary">Lista de responsables anteriorres:</h4>
+                            <ul id="listaResponsablesAnt">
+                            
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepatamentoResponsable">Seleccione responsable</label>
+                                <select multiple  id="editDepatamentoResponsable" class="form-control" required>
+                                            <!-- <option value="defaul">Ninguno</option>
+                                            <option value="1">Ana Panozo Merida</option>
+                                            <option value="2">Isabel Flores Castro</option>
+                                            <option value="3">Carla Teran Andrade</option> -->
                                 </select>
                             </div>
-                            <div class="form-group col-4">
-                                <label for="editUATelef">Telefono:</label>
-                                <input type="text"  id="editUATelef" class="form-control">
-                            </div>
-                        </div>
+                        <div class="move-container2"></div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Actualizar">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -211,9 +209,14 @@
             </div>
         </div>
     </div>
+
+
+
 </body>
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="librerias/tail.select.js"></script>
-    <script src="src/home_administrador.js"></script>
+    <script src="src/sub_unidadUA.js"></script>
+    <!-- <script src="src/home_admi_gastos.js"></script> -->
+<!-- select2 -->
 </html>

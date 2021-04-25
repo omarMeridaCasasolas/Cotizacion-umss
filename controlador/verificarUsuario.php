@@ -18,8 +18,9 @@
                 case 'Administrador':
                     header("Location:../vista/home_Administrador.php");
                     break;
-                case 'unidadAdministrativa':
-                    //header("Location:../vista/home_usuario.php");
+                case 'Unidad Administrativa':
+                    $_SESSION['idUA'] = $res['id_uni_admin'];
+                    header("Location:../vista/sub_unidadUA.php");
                     break;
                 case 'unidadDeGastos':
                     //header("Location:../vista/home_usuario.php");
