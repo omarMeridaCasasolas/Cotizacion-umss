@@ -18,7 +18,7 @@
             echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
         public function getFacultadeSelect(){
-            $sql = "SELECT id_facultad, nombre_facultad FROM facultad WHERE id_facultad NOT IN
+            $sql = "SELECT id_facultad, nombre_facultad FROM facultad WHERE activo_facultad = false AND id_facultad NOT IN
             (SELECT id_facultad FROM unidad_administrativa)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();

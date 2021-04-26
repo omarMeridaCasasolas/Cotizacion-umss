@@ -1,6 +1,6 @@
-let tablaUsuario, selectEditUA , selectAddUA ;
+let tablaUsuario, selectEditUA , selectAddUA, tablaFacultad ;
 let listaNombreasUA = new Array();
-
+let listaCorreos = new Array();
 function obtenerTablas(){
     listaNombreasUA = new Array();
     let aux = tablaUsuario.column(0).data();
@@ -12,9 +12,39 @@ function obtenerTablas(){
 }
 
 $(document).ready(function () {
+    let params = new URLSearchParams(location.search);
+    let contract = params.get('action');
+    if(contract != null){
+        Swal.fire(contract+'!!',"Se ha actualizado los datos del usuario",'success');
+    }
+    //FACULTADES
+    getTablaFacultades();
+    listaDeCorreos($("#editCorreo").val().trim());
+    $("#formEditDatosPersonales").submit(function (e) { 
+        //
+        let passRepeat = $("#editRepeatPass").val().trim();
+        let pass = $("#editPass").val().trim();
+        let correo = $("#editCorreo").val().trim();
+        if(listaCorreos.includes(correo)){
+            $("#spanEditMyCorreo").html("Correo registrado");
+            e.preventDefault();
+        }else{
+            $("#spanEditMyCorreo").html("");
+            if( pass != passRepeat ){
+                $("#spanEditPass").html("Deben coincidir");
+                e.preventDefault();
+            }else{
+                $("#spanEditPass").html("");
+                // e.preventDefault();
+            }
+        }
+    });
+
+    //FIN DE FACULTADES
+
     getUnidadesAdministrativa();
     actualizarFacultades();
-    actualizarUsuariosAdministrativos();
+    // actualizarUsuariosAdministrativos();
     
 
     $("#tablaUsuario tbody").on('click','button.editUA ',function () {
@@ -327,3 +357,102 @@ function obtenerFacultadesDisponibles(id,nombre){
     });
 }
 
+
+// INICIO FUNCIONES FACULTADES
+function getTablaFacultades(){
+    $('#tablaFacultad').dataTable().fnDestroy();
+    tablaFacultad = $("#tablaFacultad").DataTable({
+        responsive: true,
+        "order": [[ 3, "asc" ]],
+        language: {
+          sProcessing: "Procesando...",
+          sLengthMenu: "Mostrar _MENU_ registros",
+          sZeroRecords: "No se encontraron resultados",
+          sEmptyTable: "Ningún dato disponible en esta tabla",
+          sInfo:
+            "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+          sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+          sInfoPostFix: "",
+          sSearch: "Buscar:",
+          sUrl: "",
+          sInfoThousands: ",",
+          sLoadingRecords: "Cargando...",
+          oPaginate: {
+            sFirst: "Primero",
+            sLast: "Último",
+            sNext: "Siguiente",
+            sPrevious: "Anterior",
+          },
+          oAria: {
+            sSortAscending:
+              ": Activar para ordenar la columna de manera ascendente",
+            sSortDescending:
+              ": Activar para ordenar la columna de manera descendente",
+          },
+          buttons: {
+            copy: "Copiar",
+            colvis: "Visibilidad",
+          },
+        },
+        ajax: {
+          method: "POST",
+          data: { metodo: "getFacultades" },
+          url: "../controlador/facultad.php",
+        },
+        columns: [
+          { data: "nombre_facultad", width: "30%" },
+          { data: "siglas_facutlad", width: "10%" },
+          { data: "fecha_facultad", width: "15%" },
+          { data: "telefono_facultad", width: "15%" },
+          {
+            data: "activo_facultad", // can be null or undefined
+            // "defaultContent": "Sin Asignacion", "width": "15%"},
+            render: function (data) {
+              if (data == true) {
+                return '<h5><span class="badge badge-success">Activo</span></h5>';
+              } else {
+                return '<h5><span class="badge badge-danger">Baja</span></h5>';
+              }
+            },
+            width: "15%",
+          },
+          {
+            data: null,
+            defaultContent:
+              "<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-sync'></i></button>",
+            width: "15%",
+          }
+        ],
+        "initComplete": function(settings, json) {
+            //getNombreFacultades();
+          }
+    });
+}
+
+function getNombreFacultades(){
+    listaNombreFacultades = new Array();
+    let aux = tablaFacultad.column(0).data();
+    for(let i = 0; i < aux.length ; i++){
+        listaNombreFacultades.push(aux[i]);
+    } 
+}
+
+function listaDeCorreos(correo){
+    $.ajax({
+        type: "POST",
+        url: "../controlador/usuario.php",
+        data: {metodo:'getCorreoUsuarios',correo},
+        success: function (response) {
+            let lista = JSON.parse(response);
+            if(listaCorreos == "Metodo no existe"){
+                Swal.fire('¡Problema!',listaCorreos,'info');
+            }else{
+                lista.forEach(element => {
+                    listaCorreos.push(element.login_usuario);
+                });
+                console.log(listaCorreos);
+            }
+        }
+    });
+}

@@ -19,7 +19,7 @@
         }
 
         public function getUnidadAdministrativa(){
-            $sql = "SELECT id_uni_admin, nombre_ua,id_usuario, fecha_ua, unidad_administrativa.id_facultad ,nombre_facultad, telefono_ua, activo_ua FROM 
+            $sql = "SELECT id_unidad_admin, nombre_ua, fecha_ua, unidad_administrativa.id_facultad ,nombre_facultad, telefono_ua, activo_ua FROM 
             unidad_administrativa INNER JOIN facultad ON facultad.id_facultad = unidad_administrativa.id_facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();

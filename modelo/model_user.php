@@ -9,8 +9,23 @@
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
-        public function getResponsableDisponiblesUA(){
-            
+
+
+        public function getCorreoUsuarios($correo){
+            $sql = "SELECT DISTINCT(login_usuario) FROM usuario WHERE login_usuario <> :correo";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $sentenceSQL-> execute(array(':correo'=>$correo));
+            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            return json_encode($respuesta);
+        }
+
+        public function actualizarDatosUsuario($id,$nombre,$apellido,$correo,$telefono,$password){
+            $sql = "UPDATE usuario SET nombre_usuario = :nombre, apellido_usuario = :apellido, pass_usuario = :pass, login_usuario = :correo, telef_usuario = :telef WHERE id_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":apellido"=>$apellido,":pass"=>$password,":correo"=>$correo,":telef"=>$telefono,":id"=>$id));
+            $sentenceSQL->closeCursor();
+            return $res;
         }
 
         public function actualizarUsuarioTipo($idTipo,$editUsuarioRol){
@@ -90,7 +105,7 @@
             echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
         public function obtenerUsuario($user,$pass){
-            $sql = "SELECT * FROM usuario WHERE login_usuario = :user AND pass_usuario = :pass";
+            $sql = "SELECT * FROM usuario WHERE UPPER(login_usuario) = UPPER(:user) AND pass_usuario = :pass";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute(array(":user"=>$user,":pass"=>$pass));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

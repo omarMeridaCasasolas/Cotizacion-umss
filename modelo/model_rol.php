@@ -10,14 +10,15 @@
             $this->connexion_bd=null;
         } 
         public function getRolUsuario($idUsuario){
-            $sql = "SELECT role, nombre_ua, ut.id_usuario, id_facultad, rol_activo, id_uni_admin  FROM usuario_tipo 
-            as ut JOIN unidad_administrativa as ua ON ut.id_usuario = ua.id_usuario  WHERE ut.id_usuario = :id";
+            $sql = "SELECT nombre_rol FROM rol where id_rol = (SELECT id_rol FROM usuario_rol WHERE id_usuario = :id)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute(array(":id"=>$idUsuario));
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
             return $respuesta[0];
         }
+
+
         public function getFacultadeSelect(){
             $sql = "SELECT id_facultad, nombre_facultad FROM facultad";
             $sentenceSQL = $this->connexion_bd->prepare($sql);

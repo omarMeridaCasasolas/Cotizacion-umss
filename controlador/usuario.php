@@ -5,6 +5,10 @@
         $user = new User();
         $res ="Metodo no existe";
         switch ($metodo) { 
+            case 'getCorreoUsuarios': 
+                $correo = $_REQUEST['correo'];
+                $res = $user->getCorreoUsuarios($correo);
+                break;
             case 'getResponsableDisponiblesUA':
                 $res = $user->getResponsableDisponiblesUA();
                 break;
