@@ -54,7 +54,15 @@
             $sentenceSQL->closeCursor();
             return json_encode($respuesta);
         }
-
+        // funcion o metodo de julio
+        public function getObtenerFAcultades(){
+            $sql = "SELECT * FROM facultad";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $sentenceSQL-> execute();
+            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            return json_encode($respuesta);
+        }
 
         // public function EliminarFacultad($idFacultad){
         //     $sql = "DELETE FROM facultades WHERE id_facultad = :id";

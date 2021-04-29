@@ -5,6 +5,9 @@
         $facultad = new Facultad();
         $res ="metodo no funcionando";
         switch ($metodo) { 
+            case 'getObtenerFAcultades':
+                $res = $facultad->getObtenerFAcultades();
+                break;
             case 'actualizarFacultadBD':
                 $idFacultad = $_REQUEST['idFacultad'];
                 $nombre = $_REQUEST['nombre'];

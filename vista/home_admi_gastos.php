@@ -3,7 +3,7 @@
     if(isset($_SESSION["nombreUsuario"])){
 
     }else{
-         header("Location:../index.php");
+         header("Location:../index.php?error=usuario no identidicado");
      }
 ?>
 <!DOCTYPE html>

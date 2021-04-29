@@ -16,6 +16,11 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Inicio de session</title>
+    <?php 
+        if(isset($_GET['error'])){
+            echo "<script>alert('Usuario no autorizado');</script>";
+        }
+    ?>
 </head>
 <body class="bg-secondary my-5">
     <main class="container bg-light rounded p-3">
