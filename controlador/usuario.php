@@ -4,7 +4,20 @@
         $metodo = $_REQUEST['metodo'];
         $user = new User();
         $res ="Metodo no existe";
-        switch ($metodo) { 
+        switch ($metodo) {  
+            case 'actualizarUsuarioUA':
+                $responsableAnterior = $_REQUEST['responsableAnterior'];
+                $res = $user->eliminarUsuarioUA($responsableAnterior);
+                echo $res." mientras que el idIA ".$_REQUEST['idUA'];
+                $idUA = $_REQUEST['idUA'];
+                $responsableActual = $_REQUEST['responsableActual'];
+                $res = $user->agregarUsuarioUA($responsableActual,$idUA);
+                // if(is_numeric($res)){
+                //     $idUA = $_REQUEST['idUA'];
+                //     $responsableActual = $_REQUEST['responsableActual'];
+                //     $res = $user->agregarUsuarioUA($responsableActual,$idUA);
+                // }
+                break;
             case 'getCorreoUsuarios': 
                 $correo = $_REQUEST['correo'];
                 $res = $user->getCorreoUsuarios($correo);

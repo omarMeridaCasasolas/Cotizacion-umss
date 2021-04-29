@@ -51,7 +51,7 @@
     <main class="container bg-light rounded-lg border p-2">
         <div id="accordion">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header text-center">
                     <h3><a class="card-link" data-toggle="collapse" href="#collapseOne">Facultades</a></h3>
                 </div>
                 <div id="collapseOne" class="collapse show" >
@@ -59,7 +59,7 @@
                         <div class="m-3">
                         <button class="btn btn-success" data-toggle="modal" data-target="#myModal4">+ Facultad</button>
                         </div>
-                        <table class="table display" id="tablaFacultad">
+                        <table class="table-sm display table-bordered" id="tablaFacultad">
                             <thead>
                                 <tr class="bg-info">
                                 <th>Nombre Facultad</th>
@@ -76,17 +76,18 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h3><a class="card-link" data-toggle="collapse" href="#collapseDos">Unidades Administrativas</a></h3>
+                    <h3 class="text-center"><a class="card-link" data-toggle="collapse" href="#collapseDos">Unidades Administrativas</a></h3>
                 </div>
                 <div id="collapseDos" class="collapse show" >
                     <div class="card-body">
                         <div class="m-3">
                         <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Unidad Administrativa</button>
                         </div>
-                        <table class="display" id="tablaUsuario">
+                        <table class="table-sm display table-bordered" id="tablaUnidadAdministrativa">
                             <thead>
                                 <tr class="bg-info">
                                     <th>Nombre Unidad</th>
+                                    <th>Responsable</th>
                                     <th>Facultad</th>
                                     <th>Fecha</th>
                                     <th>Estado</th>
@@ -98,24 +99,6 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="d-none">
-            <h1 class="text-primary text-center">Unidades Administrativas</h1>
-            <div class="m-3">
-                <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Unidad Administrativa</button>
-            </div>
-            <table class="display" id="tablaUsuario">
-                <thead>
-                    <tr class="bg-info">
-                        <th>Nombre Unidad</th>
-                        <th>Facultad</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-            </table>
         </div>
     </main>
 
@@ -139,34 +122,18 @@
                             <span class="text-danger" id="spanNomDep"></span>
                         </div>
                         <div class="row">
-                            <div class="form-group col-8">
+                            <div class="form-group col-7">
                                 <label for="addDepatamentoFacultad">Seleccione Facultad:</label>
                                 <select name="addDepatamentoFacultad" id="addDepatamentoFacultad" class="form-control" required>
                                     <option value="Ninguno">Ninguno</option>
                                 </select>
                                 <span class="text-danger" id="spanDepFac"></span>
                             </div>
-                            <div class="form-group col-4">
-                                <label for="addDepatamentoTelef">Telefono:</label>
+                            <div class="form-group col-5">
+                                <label for="addDepatamentoTelef">Telefono Unidad:</label>
                                 <input type="text" name="" id="addDepatamentoTelef" class="form-control" required>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-8">
-                                <label for="addDepatamentoCorreo">Correo:</label>
-                                <input type="text" name="" id="addDepatamentoCorreo" class="form-control">
-                                <span class="text-danger" id="spanAddUA"></span>                               
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="addDepatamentoEstado">Estado:</label>
-                                    <select name="" id="addDepatamentoEstado" class="form-control">
-                                        <option value="true">Si</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="row">
                             <div class="col-7">
                                 <label for="addDepatamentoResponsable">Seleccione responsable:</label>
@@ -175,20 +142,15 @@
                                 <span class="text-danger" id="spanAddUA"></span>                               
                             </div>
                             <div class="col-5">
-                                <label for="addDepatamentoCorreo">Correo:</label>
-                                <input type="text" name="" id="addDepatamentoCorreo" class="form-control">
+                                <label for="addDepatamentoCorreo">Correo unidad:</label>
+                                <input type="mail" name="" id="addDepatamentoCorreo" class="form-control" required>
                                 <span class="text-danger" id="spanAddUA"></span>                               
                             </div>
-                            <!-- <div class="col-4">
-                                <div class="form-group">
-                                    <label for="addDepatamentoFecha">Fecha:</label>
-                                    <input type="date" class="form-control" id="addDepatamentoFecha" required value="<?php echo date("Y-m-d");?>" disabled>
-                                </div>
-                            </div> -->
                         </div>
                         <br>
+                        <input type="date" class="d-none" id="addDepatamentoFecha" required value="<?php echo date("Y-m-d");?>" disabled>
                         <h5>Descripcion de la unidad Academica</h5>
-                        <textarea name="" id="" cols="30" rows="4" class="form-control m-2"></textarea>
+                        <textarea name="addDepartamentoDesc" id="addDepartamentoDesc" cols="30" rows="4" class="form-control m-2"></textarea>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Crear">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -241,6 +203,7 @@
                     <form action="" id="formEditUnidadAcademica">
                         <input type="text" name="editUAID" id="editUAID" class="d-none">
                         <input type="text" name="editUANomAnt" id="editUANomAnt" class="d-none">
+                        <input type="text" name="" id="editDepatamentoResponsableAnterior" class="d-none">
                         <div class="row">
                             <div class="form-group col-8">
                                 <label for="">Nombre</label>
@@ -287,6 +250,151 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL PARA CREAR FACULTAD  -->
+    <div class="modal fade" id="myModal4">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <!-- Modal Header -->
+                <div class="modal-header bg-success">
+                    <h4 class="modal-title">Crear Facultad</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" id="formAddFacultad">
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="addFacultadNombre">Nombre facultad:</label>
+                                <input type="text" id="addFacultadNombre" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                <span class="text-danger" id="spanNombreFac"></span>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="addFacultadSigla">Sigla:</label>
+                                <input type="text" id="addFacultadSigla" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,10}" required autocomplete="off" title="Solo letras y vocales">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="addFacultadCorreo">Correo Facultad:</label>
+                                <input type="mail" id="addFacultadCorreo" class="form-control" required autocomplete="off">
+                                <span class="text-danger" id="spanNombreFac"></span>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="addFacultadTelefono">Telef Facultad:</label>
+                                <input type="text" id="addFacultadTelefono" class="form-control" required pattern="[0-9]{6,8}" title="Solo números con 6 a 8 dígitos" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-7">
+                                <label for="addGestionFacultad">Tipo Gestion</label>
+                                <select name="addGestionFacultad" id="addGestionFacultad" class="form-control" required>
+                                    <option value="default">Ninguno</option>
+                                    <option value="Semestral">Semestral</option>
+                                    <option value="Anual">Anual</option>
+                                </select>
+                                <span class="text-danger" id="spanGestionFac"></span>
+                            </div>
+                            <div class="form-group col-5">
+                                <label for="addFechaFacultad">fecha:</label>
+                                <input type="date" id="addFechaFacultad" class="form-control" required value="<?php echo date("Y-m-d");?>" disabled>                            
+                                <span class="text-danger" id="spanNomDep"></span>
+                            </div>
+                        </div>
+                        <h4>Descripcion de la Facultad</h4>
+                        <textarea name="" cols="30" rows="4" id="addFacultadDesc" class="form-control my-2" required></textarea>
+                        <span class="text-danger" id="spanAddUA"></span>
+                        <div class="move-container"></div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Crear">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA DAR DE BAJA FACULTAD-->
+    <div class="modal fade" id="myModal6">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <!-- Modal Header -->
+                <div class="modal-header bg-danger">
+                    <h4 class="modal-title text-center">Cambiar estado de la Facultad</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" id="formBajaFacutltad">
+                        <input type="text" name="bajaFacultad" id="bajaFacultad" class="d-none">
+                        <input type="text" id="estadoFacultadCambio" class="d-none">
+                        <h5 id="idTextEstadoFacultdad"></h5>
+                        <!-- <h5>Desea cambiar el estado de la : <strong id='bajaUANombre'>UA</strong>, desabilitara/habilara las tareas de los usuarios</h5> -->
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Cambiar">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA EDITAR FACULTAD  -->
+
+    <div class="modal fade" id="myModal7">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <!-- Modal Header -->
+                <div class="modal-header bg-warning">
+                    <h4 class="modal-title">Editar Facultad</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" id="formEditFacultad">
+                        <input type="text" name="" id="editIDFacultad" class="d-none">
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="editFacultadNombre">Nombre facultad:</label>
+                                <input type="text" id="editFacultadNombre" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                <span class="text-danger" id="spanEditNombreFac"></span>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="editFacultadSigla">Sigla:</label>
+                                <input type="text" id="editFacultadSigla" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,10}" required autocomplete="off" title="Solo letras y vocales">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label for="editFacultadCorreo">Correo Facultad:</label>
+                                <input type="mail" id="editFacultadCorreo" class="form-control" required autocomplete="off">
+                                <span class="text-danger" id="spanEdiNombreFac"></span>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="editFacultadTelefono">Telef Facultad:</label>
+                                <input type="text" id="editFacultadTelefono" class="form-control" required pattern="[0-9]{6,8}" title="Solo números con 6 a 8 dígitos" autocomplete="off">
+                            </div>
+                        </div>
+                        <h4>Descripcion de la Facultad</h4>
+                        <textarea name="" cols="30" rows="4" id="editFacultadDesc" class="form-control my-2" required></textarea>
+                        <span class="text-danger" id="spanEditFacultadDesc"></span>
+                        <div class="move-container"></div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Actualizar">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- MODAL PARA EDITAR DATOS PERSONASLES -->
     <div class="modal fade" id="myModalX">

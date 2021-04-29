@@ -27,6 +27,26 @@
             $sentenceSQL->closeCursor();
             return json_encode($respuesta);
         }
+        
+        public function getIDRol($string){
+            $sql = "SELECT id_rol FROM rol WHERE UPPER(nombre_rol) = UPPER(:nom)";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $sentenceSQL-> execute(array(":nom"=>$string));
+            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            return $respuesta[0];
+        }
+
+
+        public function insertarUsuarioRolUA($usuario){
+            $nombreRol = $this->getIDRol("Unidad Administrativa");
+            $valorRol = $nombreRol['id_rol'];
+            $sql = "INSERT INTO usuario_rol (id_rol , id_usuario) VALUES(:idRol,:idUsuario)";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":idRol"=>$valorRol,":idUsuario"=>$usuario));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
         // public function EliminarFacultad($idFacultad){
         //     $sql = "DELETE FROM facultades WHERE id_facultad = :id";
         //     $sentenceSQL = $this->connexion_bd->prepare($sql);

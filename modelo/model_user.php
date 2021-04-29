@@ -10,7 +10,21 @@
             $this->connexion_bd=null;
         } 
 
+        public function agregarUsuarioUA($responsableActual,$idUA){
+            $sql = "UPDATE usuario SET id_unidad_admin = :idUA  WHERE id_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":idUA"=>$idUA,":id"=>$responsableActual));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
 
+        public function eliminarUsuarioUA($responsableAnterior){
+            $sql = "UPDATE usuario SET id_unidad_admin = NULL  WHERE id_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":id"=>$responsableAnterior));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
         public function getCorreoUsuarios($correo){
             $sql = "SELECT DISTINCT(login_usuario) FROM usuario WHERE login_usuario <> :correo";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
@@ -35,6 +49,14 @@
             $sentenceSQL->closeCursor();
             return $res;
         }
+        public function asignarUnidadAdministrativa($idUA,$usuario){
+            $sql = "UPDATE usuario SET id_unidad_admin =:idUA WHERE id_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":idUA"=>$idUA,":id"=>$usuario));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
+
         public function actualizarUsuario($id,$correo,$telefono){
             $sql = "UPDATE usuario SET login_usuario = :correo, telef_usuario = :telef WHERE id_usuario = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
@@ -113,8 +135,8 @@
             return $respuesta[0];
         }
         public function getUsuariosAdministrativos(){
-            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE 
-            id_usuario IN (SELECT id_usuario FROM usuario_tipo WHERE usuario_tipo.role ='Unidad Administrativa')";
+            $sql = "SELECT id_usuario, (nombre_usuario || ' ' || apellido_usuario) AS nombre FROM usuario WHERE activo_usuario = true AND id_unidad_admin IS NULL AND id_usuario IN(
+                (SELECT id_usuario FROM usuario_rol WHERE id_rol IN (SELECT id_rol FROM ROL WHERE UPPER(nombre_rol) = UPPER('Unidad Administrativa'))))";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

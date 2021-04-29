@@ -1,14 +1,15 @@
-let tablaUsuario, selectEditUA , selectAddUA, tablaFacultad ;
+let tablaUnidadAdministrativa, selectEditUA , selectAddUA, tablaFacultad ;
 let listaNombreasUA = new Array();
 let listaCorreos = new Array();
+let listaNombreFacultades = new Array();
 function obtenerTablas(){
     listaNombreasUA = new Array();
-    let aux = tablaUsuario.column(0).data();
-    console.log(aux.length);
+    let aux = tablaUnidadAdministrativa.column(0).data();
+    // console.log(aux.length);
     for(let i = 0; i < aux.length ; i++){
         listaNombreasUA.push(aux[i]);
     }  
-    console.log(listaNombreasUA);
+    // console.log(listaNombreasUA);
 }
 
 $(document).ready(function () {
@@ -20,6 +21,126 @@ $(document).ready(function () {
     //FACULTADES
     getTablaFacultades();
     listaDeCorreos($("#editCorreo").val().trim());
+
+    $("#formAddFacultad").submit(function (e) { 
+        e.preventDefault();
+        let nombre = $("#addFacultadNombre").val();
+        if(listaNombreFacultades.includes(nombre)){
+            $("#spanNombreFac").html("Nombre registrado");
+        }else{
+            let gestion = $("#addGestionFacultad").val();
+            $("#spanNombreFac").html("");
+            if(gestion == "default"){
+                $("#spanGestionFac").html("Selecione tipo de gestion");
+            }else{
+                $("#spanGestionFac").html("");
+                let sigla = $("#addFacultadSigla").val();
+                let fecha = $("#addFechaFacultad").val();
+                let correo = $("#addFacultadCorreo").val();
+                let telefono = $("#addFacultadTelefono").val();
+                let descripcion = $("#addFacultadDesc").val();
+                $('#myModal4').modal('hide');
+                $.ajax({
+                    type: "POST",
+                    url: "../controlador/facultad.php",
+                    data: {metodo:"insertarFacultad",nombre,gestion,sigla,fecha,correo,telefono,descripcion},
+                    success: function (response) {
+                        let myResp = parseInt(response);
+                        if(!isNaN(myResp)){
+                            tablaFacultad.ajax.reload();
+                            $('#formAddFacultad')[0].reset();
+                            Swal.fire('Exito!!',"Se ha actualizado la unidad Administrativa",'success');
+                            getNombreFacultades();
+                        }else{
+                            Swal.fire('Problema!!',response,'info');
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                        Swal.fire('Problema!!',error.status +" "+error.statusText,'info');;
+                    }
+                });
+            }
+        }
+    });
+
+    $("#formEditFacultad").submit(function (e) { 
+        e.preventDefault();
+        let descripcion = $("#editFacultadDesc").val();
+        let telefono = $("#editFacultadTelefono").val();
+        let correo = $("#editFacultadCorreo").val();
+        let sigla = $("#editFacultadSigla").val();
+        let nombre = $("#editFacultadNombre").val();
+        let idFacultad = $("#editIDFacultad").val();
+        $('#myModal7').modal('hide');
+        $.ajax({
+            type: "POST",
+            url: "../controlador/facultad.php",
+            data: {metodo:"actualizarFacultadBD",descripcion,telefono,correo,sigla,nombre,idFacultad},
+            success: function (response) {
+                let num = parseInt(response);
+                if(!isNaN(num)){
+                    tablaFacultad.ajax.reload();
+                    Swal.fire('Exito!!','Se ha actualizado la facultad: '+nombre,'success');
+                    $('#formEditFacultad')[0].reset();
+                }else{
+                    Swal.fire('Problema!!', response,'info');
+                }
+            },
+            error: function( val ){
+                console.log(val);
+            }
+        });
+    });
+
+    $("#formBajaFacutltad").submit(function (e) { 
+        e.preventDefault();
+        $('#myModal6').modal('hide');
+        $.ajax({
+            type: "POST",
+            url: "../controlador/facultad.php",
+            data: {metodo:"cambiarEstadoFacultad",idFacultad: $("#bajaFacultad").val(), estado: $("#estadoFacultadCambio").val()},
+            success: function (response) {
+                console.log(response);
+                let aux = parseInt(response);
+                if(!isNaN(aux)){
+                    tablaFacultad.ajax.reload();
+                    Swal.fire("Exito!!","Se ha actualizado el cambio de la facultad",'success');
+                }else{
+                    Swal.fire("Problema",response,'info');
+                }
+            }
+        });
+    });
+
+    $("#tablaFacultad tbody").on('click','button.editFacultad ',function () {
+        let dataEditFac = tablaFacultad.row( $(this).parents('tr') ).data();
+        // console.log(dataEditFac);
+        $("#editIDFacultad").val(dataEditFac.id_facultad);
+        $("#editFacultadNombre").val(dataEditFac.nombre_facultad);
+        $("#editFacultadSigla").val(dataEditFac.siglas_facutlad);
+        $("#editFacultadCorreo").val(dataEditFac.correo_facultad);
+        $("#editFacultadTelefono").val(dataEditFac.telefono_facultad);
+        $("#editFacultadDesc").val(dataEditFac.descripcion_facultad);
+    });
+
+    $("#tablaFacultad tbody").on('click','button.bajaFacultad ',function () {
+        let dataBajaFacultad = tablaFacultad.row( $(this).parents('tr') ).data();
+        $("#bajaFacultad").val(dataBajaFacultad.id_facultad);
+        // console.log(dataBajaFacultad);
+        $("#estadoFacultadCambio").val(!dataBajaFacultad.activo_facultad);
+        if(dataBajaFacultad.activo_facultad){ 
+            $("#idTextEstadoFacultdad").html("Desea desactivar la <strong>"+dataBajaFacultad.nombre_facultad+"</strong>, esto permitira desabilitar las funciones de sus usuarios");
+        }else{
+            $("#idTextEstadoFacultdad").html("Desea activar la <strong>"+dataBajaFacultad.nombre_facultad+"</strong>, esto permitira habilitar las funciones de sus usuarios");
+        }
+        // $('#bajaFacultadNombre').html(dataBajaFacultad.nombre_facultad);
+    });
+
+
+
+    //FORMULARIOS Y FUNCIONES DEL SISTEMAS
+
     $("#formEditDatosPersonales").submit(function (e) { 
         //
         let passRepeat = $("#editRepeatPass").val().trim();
@@ -40,35 +161,39 @@ $(document).ready(function () {
         }
     });
 
+
+
     //FIN DE FACULTADES
 
     getUnidadesAdministrativa();
     actualizarFacultades();
-    // actualizarUsuariosAdministrativos();
+    actualizarUsuariosAdministrativos();
     
 
-    $("#tablaUsuario tbody").on('click','button.editUA ',function () {
+    $("#tablaUnidadAdministrativa tbody").on('click','button.editUA ',function () {
         $("#editUAFacultad").empty();
-        let dataEditUA = tablaUsuario.row( $(this).parents('tr') ).data();
+        let dataEditUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
         $("#editUAFacultad").append("<option value='"+dataEditUA.id_facultad+"'>"+dataEditUA.nombre_facultad+"</option>");
         $("#editUAFacultad").val(dataEditUA.id_facultad);
-        console.log(dataEditUA);
-        //$("#editUAFacultad").empty();
+        // console.log(dataEditUA);
         $("#editUATelef").val(dataEditUA.telefono_ua);
-        $("#editUAID").val(dataEditUA.id_uni_admin);
+        $("#editUAID").val(dataEditUA.id_unidad_admin);
         $('#editUANombre').val(dataEditUA.nombre_ua);
         $('#editUANomAnt').val(dataEditUA.nombre_ua);
         $("#editUAFecha").val(dataEditUA.fecha_ua);
         obtenerFacultadesDisponibles(dataEditUA.id_facultad,dataEditUA.nombre_facultad);
+        $("#editDepatamentoResponsable").append("<option value='"+dataEditUA.id_usuario+"'>"+dataEditUA.nombre+"</option>");
         $("#editDepatamentoResponsable").val(dataEditUA.id_usuario);
+        $("#editDepatamentoResponsableAnterior").val(dataEditUA.id_usuario);
         $("#editUAEstado").val(String(dataEditUA.activo_ua));
     });
 
 
 
-    $("#tablaUsuario tbody").on('click','button.bajaUA',function () {
-        let dataBajaUA = tablaUsuario.row( $(this).parents('tr') ).data();
-        $("#bajaUA").val(dataBajaUA.id_uni_admin);
+    $("#tablaUnidadAdministrativa tbody").on('click','button.bajaUA',function () {
+        let dataBajaUA = tablaUnidadAdministrativa.row( $(this).parents('tr') ).data();
+        $("#bajaUA").val(dataBajaUA.id_unidad_admin);
+        console.log(dataBajaUA);
         $("#estadoUACambio").val(!dataBajaUA.activo_ua);
         if(dataBajaUA.activo_ua){
             $("#idTextEstado").html("Desea desactivar la <strong>"+dataBajaUA.nombre_ua+"</strong>, esto permitira desabilitar las funciones de sus usuarios");
@@ -83,39 +208,48 @@ $(document).ready(function () {
         let idUA = $("#editUAID").val().trim();
         let nombreUA = $("#editUANombre").val().trim();
         let idFacultad = $("#editUAFacultad").val();
-        let gestionUA = $("#editUAGestion").val().trim();
-        let activoUA = $("#editUAEstado").val();
-        let listaResponsables = $("#editDepatamentoResponsable").val();
+        let responsableActual = $("#editDepatamentoResponsable").val();
+        let responsableAnterior = $("#editDepatamentoResponsableAnterior").val();
+        let telefono = $("#editUATelef").val();
         if (!listaNombreasUA.includes(nombreUA) || nombreUA ==$('#editUANomAnt').val()){
             $("#spanNomEditDep").html("");
+            $('#myModal2').modal('hide');
             $.ajax({
                 type: "POST",
                 url: "../controlador/unidadAdministrativa.php",
-                data: {metodo: 'actualizarUA',idUA,nombreUA,idFacultad,gestionUA,activoUA},
+                data: {metodo: 'actualizarUA',idUA,nombreUA,idFacultad,telefono},
                 success: function (response) {
-                    $('#myModal2').modal('hide');
-                    if(!isNaN(response)){
-                        $.ajax({
-                            type: "POST",
-                            url: "../controlador/usuario_ua.php",
-                            data: {metodo:'actualizarUsuarioUA',listaResponsables,idUA},
-                            success: function (res) {
-                                //console.log(res);
-                                tablaUsuario.ajax.reload();
-                                //tablaUsuario.initComplete();
-                                $('#formEditUnidadAcademica')[0].reset();
-                                if(!isNaN(res)){
-                                    Swal.fire('Exito!!',"Se ha actualizado la unidad Administrativa",'success');
-                                    obtenerTablas();
-                                }else{
-                                    Swal.fire('Problemas',res,'danger');
+                    let aux = parseInt(response);
+                    console.log(responsableActual+"  "+responsableAnterior);
+                    if(!isNaN(aux)){
+                        if(responsableActual != responsableAnterior){
+                            $.ajax({
+                                type: "POST",
+                                url: "../controlador/usuario.php",
+                                data: {metodo:'actualizarUsuarioUA',responsableActual,responsableAnterior,idUA},
+                                success: function (res) {
+                                    let aux2 = parseInt(res);
+                                    console.log(res);
+                                    if(!isNaN(aux2)){
+                                        tablaUnidadAdministrativa.ajax.reload();
+                                        $('#formEditUnidadAcademica')[0].reset();
+                                        Swal.fire('Exito!!',"Se ha actualizado la unidad Administrativa",'success');
+                                        obtenerTablas();
+                                    }else{
+                                        Swal.fire('Problemas',res,'info');
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }else{
+                            tablaUnidadAdministrativa.ajax.reload();
+                            $('#formEditUnidadAcademica')[0].reset();
+                            Swal.fire('Exito!!',"Se ha actualizado la unidad Administrativa",'success');
+                            obtenerTablas();
+                        }
                     }else{
-                        $('#myModal2').modal('hide');
-                        Swal.fire('Problemas',response,'danger');
+                        Swal.fire('Problemas',response,'info');
                     }
+
                 }
             });   
         } else {
@@ -130,18 +264,15 @@ $(document).ready(function () {
             url: "../controlador/unidadAdministrativa.php",
             data: {metodo:'cambioEstadoUA',idUA:$("#bajaUA").val(),cambioUA:$("#estadoUACambio").val()},
             success: function (response) {
-                if(!isNaN(response)){
-                    //$('#myModal3').modal('hide');
-                    //getUnidadesAdministrativa();
-                    tablaUsuario.ajax.reload();
+                let aux = parseInt(response);
+                console.log(aux);
+                if(!isNaN(aux)){
+                    tablaUnidadAdministrativa.ajax.reload();
                     actualizarFacultades();
-                    //Swal.fire('¡Correcto!','Se Dio de baja la unidad, ahora se le puede asignar otra unidad Administrativa'+nombre,'success');  
+                    Swal.fire('¡Correcto!','Se cambio el estado de unidad Administrativa'+nombre,'success');  
                 }else{
-                    //$('#myModal3').modal('hide');  
                     Swal.fire('Problemas',res,'danger');
-            }
-
-
+                }
             }
         });
         e.preventDefault();    
@@ -154,6 +285,8 @@ $(document).ready(function () {
         let fecha = $("#addDepatamentoFecha").val().trim();
         let telefono = $("#addDepatamentoTelef").val().trim();
         let usuario = $('#addDepatamentoResponsable').val();
+        let correo = $('#addDepatamentoCorreo').val().trim();
+        let descripcion = $('#addDepartamentoDesc').val().trim();
         if(usuario == "Ninguno"){
             $("#spanAddUA").html("Seleccione un usuario");
         }else{
@@ -170,9 +303,10 @@ $(document).ready(function () {
                     $.ajax({
                         type: "POST",
                         url: "../controlador/unidadAdministrativa.php",
-                        data: {metodo:"insertarUnidadAdministrativa",nombre, usuario ,idFacultad, fecha, telefono},
+                        data: {metodo:"insertarUnidadAdministrativa",nombre, usuario ,idFacultad, fecha, telefono, correo, descripcion},
                         success: function (response) {
-                            tablaUsuario.ajax.reload();
+                            tablaUnidadAdministrativa.ajax.reload();
+                            console.log(response);
                             if(!isNaN(response)){
                                 Swal.fire('¡Exito!','Se ha agregado la unidad administrattiva '+nombre,'success');
                                 actualizarFacultades();
@@ -213,8 +347,8 @@ function actualizarFacultades(){
 }
 
 function getUnidadesAdministrativa(){
-    $('#tablaUsuario').dataTable().fnDestroy();
-    tablaUsuario = $("#tablaUsuario").DataTable({
+    $('#tablaUnidadAdministrativa').dataTable().fnDestroy();
+    tablaUnidadAdministrativa = $("#tablaUnidadAdministrativa").DataTable({
         responsive: true,
         "order": [[ 2, "asc" ]],
         language: {
@@ -255,8 +389,9 @@ function getUnidadesAdministrativa(){
         },
         columns: [
           { data: "nombre_ua", width: "25%" },
-          { data: "nombre_facultad", width: "30%" },
-          { data: "fecha_ua", width: "15%" },
+          { data: "nombre", width: "20%" },
+          { data: "nombre_facultad", width: "25%" },
+          { data: "fecha_ua", width: "10%" },
           {
             data: "activo_ua", // can be null or undefined
             // "defaultContent": "Sin Asignacion", "width": "15%"},
@@ -267,13 +402,13 @@ function getUnidadesAdministrativa(){
                 return '<h5><span class="badge badge-danger">Baja</span></h5>';
               }
             },
-            width: "15%",
+            width: "10%",
           },
           {
             data: null,
             defaultContent:
               "<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-sync'></i></button>",
-            width: "15%",
+            width: "10%",
           }
         ],
         "initComplete": function(settings, json) {
@@ -420,12 +555,12 @@ function getTablaFacultades(){
           {
             data: null,
             defaultContent:
-              "<button type='button' class='editUA btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal2'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaUA btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal3'><i class='fas fa-sync'></i></button>",
+              "<button type='button' class='editFacultad btn btn-warning btn-sm' data-toggle='modal' data-target='#myModal7'><i class='fas fa-edit'></i></button>	<button type='button' class='bajaFacultad btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal6'><i class='fas fa-sync'></i></button>",
             width: "15%",
           }
         ],
         "initComplete": function(settings, json) {
-            //getNombreFacultades();
+            getNombreFacultades();
           }
     });
 }
@@ -435,8 +570,10 @@ function getNombreFacultades(){
     let aux = tablaFacultad.column(0).data();
     for(let i = 0; i < aux.length ; i++){
         listaNombreFacultades.push(aux[i]);
-    } 
+    }
+    // console.log(listaNombreFacultades); 
 }
+
 
 function listaDeCorreos(correo){
     $.ajax({
@@ -451,7 +588,7 @@ function listaDeCorreos(correo){
                 lista.forEach(element => {
                     listaCorreos.push(element.login_usuario);
                 });
-                console.log(listaCorreos);
+                //console.log(listaCorreos);
             }
         }
     });

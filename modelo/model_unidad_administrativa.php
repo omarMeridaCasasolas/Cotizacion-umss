@@ -10,33 +10,42 @@
             $this->connexion_bd=null;
         } 
 
-        public function actualizarUA($idUA,$nombreUA,$gestionUA,$activoUA){
-            $sql = "UPDATE unidad_administrativa SET nombre_ua = :nombre, gestion_ua = :gestion, activo_ua = :activo WHERE id_uni_admin = :id";
+        public function actualizarUA($idUA,$nombreUA,$idFacultad,$telefono){
+            $sql = "UPDATE unidad_administrativa SET nombre_ua = :nombre, id_facultad = :idFacultad, telefono_ua = :telef WHERE id_unidad_admin = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUA,":nombre"=>$nombreUA,":gestion"=>$gestionUA,":activo"=>$activoUA));
+            $respuesta = $sentenceSQL-> execute(array(":id"=>$idUA,":nombre"=>$nombreUA,":idFacultad"=>$idFacultad,":telef"=>$telefono));
             $sentenceSQL->closeCursor();
             return $respuesta;
         }
 
         public function getUnidadAdministrativa(){
-            $sql = "SELECT id_unidad_admin, nombre_ua, fecha_ua, unidad_administrativa.id_facultad ,nombre_facultad, telefono_ua, activo_ua FROM 
-            unidad_administrativa INNER JOIN facultad ON facultad.id_facultad = unidad_administrativa.id_facultad";
+            $sql = "SELECT ua.id_unidad_admin, nombre_ua, fecha_ua, ua.id_facultad ,nombre_facultad, telefono_ua, activo_ua, id_usuario , (nombre_usuario || ' ' || apellido_usuario) AS nombre 
+			FROM unidad_administrativa as ua INNER JOIN facultad ON facultad.id_facultad = ua.id_facultad INNER JOIN 
+			usuario ON usuario.id_unidad_admin = ua.id_unidad_admin";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $sentenceSQL-> execute();
             $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenceSQL->closeCursor();
             echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
         }
-        public function insertarUnidadAdministrativa($nombre,$idFacultad,$fecha,$usuario,$telefono){
-            $sql = "INSERT INTO unidad_administrativa (nombre_ua,id_usuario ,id_facultad, fecha_ua,telefono_ua, activo_ua) VALUES(:nombre,:usuario,:idFacultad,:fecha,:telef,true)";
+        public function insertarUnidadAdministrativa($nombre,$idFacultad,$fecha,$usuario,$telefono,$correo,$descripcion){
+            $sql = "INSERT INTO unidad_administrativa (nombre_ua,id_facultad, fecha_ua,telefono_ua, activo_ua, correo_ua, descripcion_ua) 
+            VALUES(:nombre,:idFacultad,:fecha,:telef,true,:correo,:descripcion)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":idFacultad"=>$idFacultad,":fecha"=>$fecha,":usuario"=>$usuario,":telef"=>$telefono));
+            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":idFacultad"=>$idFacultad,":fecha"=>$fecha,":telef"=>$telefono,":correo"=>$correo,":descripcion"=>$descripcion));
+            if($res == 1 || $res == true){
+                $res = $this->connexion_bd->lastInsertId();
+                $string = preg_replace("/[\r\n|\n|\r]+/", PHP_EOL, $res);
+                $sentenceSQL->closeCursor();
+                return $string;
+            }
             $sentenceSQL->closeCursor();
+            //$res = json_encode($respuesta);
             return $res;
         } 
 
         public function cambioEstadoUA($idUnidadAdministrativa,$cambioUA){
-            $sql = "UPDATE unidad_administrativa SET activo_ua = :estado WHERE id_uni_admin = :id";
+            $sql = "UPDATE unidad_administrativa SET activo_ua = :estado WHERE id_unidad_admin = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $respuesta = $sentenceSQL-> execute(array(":id"=>$idUnidadAdministrativa, ":estado"=>$cambioUA));
             $sentenceSQL->closeCursor();
