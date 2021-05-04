@@ -9,6 +9,32 @@
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
+        public function actualizarTipoUsuario($idRolUsuario,$tipo){
+            $sql = "UPDATE usuario_rol SET id_rol = :idRol  WHERE id_rol_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":idRol"=>$tipo,":id"=>$idRolUsuario));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
+
+        public function cambiarEstadoUsuario($idUsuario,$estado){
+            $sql = "UPDATE usuario SET activo_usuario = :estado  WHERE id_usuario = :id";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":estado"=>$estado,":id"=>$idUsuario));
+            $sentenceSQL->closeCursor();
+            return $res;
+        }
+
+        public function getListaUsuario(){
+            $sql = "SELECT rol.id_rol, usuario.id_usuario, login_usuario,nombre_usuario, apellido_usuario , (nombre_usuario || ' ' || apellido_usuario) AS nombre, telef_usuario, activo_usuario , id_rol_usuario,nombre_rol
+            FROM usuario INNER JOIN usuario_rol ON usuario.id_usuario = usuario_rol.id_usuario 
+			INNER JOIN rol ON rol.id_rol = usuario_rol.id_rol WHERE  nombre_rol = 'Unidad Administrativa' OR nombre_rol = 'Unidad de Gastos';";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $sentenceSQL-> execute();
+            $respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            echo json_encode(array('data' => $respuesta), JSON_PRETTY_PRINT);
+        }
 
         public function agregarUsuarioUA($responsableActual,$idUA){
             $sql = "UPDATE usuario SET id_unidad_admin = :idUA  WHERE id_usuario = :id";
@@ -57,10 +83,10 @@
             return $res;
         }
 
-        public function actualizarUsuario($id,$correo,$telefono){
-            $sql = "UPDATE usuario SET login_usuario = :correo, telef_usuario = :telef WHERE id_usuario = :id";
+        public function actualizarUsuario($id,$nombre,$apellido,$correo,$telefono){
+            $sql = "UPDATE usuario SET nombre_usuario = :nombre, apellido_usuario = :apellido,login_usuario = :correo, telef_usuario = :telef WHERE id_usuario = :id";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
-            $res = $sentenceSQL->execute(array(":correo"=>$correo,":telef"=>$telefono,":id"=>$id));
+            $res = $sentenceSQL->execute(array(":nombre"=>$nombre,"apellido"=>$apellido,":correo"=>$correo,":telef"=>$telefono,":id"=>$id));
             $sentenceSQL->closeCursor();
             return $res;
         }
@@ -93,8 +119,8 @@
         }
 
         public function insertarUsuario($nombre,$apellido,$ci,$pass,$correo,$telefono){
-            $sql = "INSERT INTO usuario(nombre_usuario, apellido_usuario,ci_usuario,pass_usuario,login_usuario,telef_usuario)
-            VALUES(:nombre,:apellido,:ci,:pass,:correo,:telef)";
+            $sql = "INSERT INTO usuario(nombre_usuario, apellido_usuario,ci_usuario,pass_usuario,login_usuario,telef_usuario,activo_usuario)
+            VALUES(:nombre,:apellido,:ci,:pass,:correo,:telef,true)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);
             $res = $sentenceSQL->execute(array(":nombre"=>$nombre,":apellido"=>$apellido,":ci"=>$ci,":pass"=>$pass,":correo"=>$correo,":telef"=>$telefono));
             //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);

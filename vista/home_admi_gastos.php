@@ -149,8 +149,6 @@
     </div>
 
 
-
-
         <!-- MODAL PARA EDITAR -->
         <div class="modal fade" id="myModal2">
         <div class="modal-dialog">

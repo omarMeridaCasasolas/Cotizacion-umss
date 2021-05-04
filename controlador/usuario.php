@@ -4,7 +4,35 @@
         $metodo = $_REQUEST['metodo'];
         $user = new User();
         $res ="Metodo no existe";
-        switch ($metodo) {  
+        switch ($metodo) {
+            case 'actualizarTipoUsuario':
+                $idRolUsuario = $_REQUEST['idRolUsuario'];
+                $tipo = $_REQUEST['tipo'];
+                $res = $user->actualizarTipoUsuario($idRolUsuario,$tipo);
+                break;
+            case 'agregarUsuario':
+                $nombre = $_REQUEST['nombre'];
+                $apellido = $_REQUEST['apellido'];
+                $correo = $_REQUEST['correo'];
+                $pass = $_REQUEST['pass'];
+                $telefono = $_REQUEST['telefono'];
+                $carnet = $_REQUEST['carnet'];
+                $tipo = $_REQUEST['tipo'];
+                $res = $user->insertarUsuario($nombre,$apellido,$carnet,$pass,$correo,$telefono);
+                if(is_numeric($res)){
+                    require_once("../modelo/model_rol.php");
+                    $rol = new Rol();
+                    $res = $rol->insertarUsuarioARol($res,$tipo);
+                }
+                break;  
+            case 'cambiarEstadoUsuario':
+                $idUsuario = $_POST['idUsuario'];
+                $estado = $_POST['estado'];
+                $res = $user->cambiarEstadoUsuario($idUsuario,$estado);
+                break;
+            case 'getListaUsuario';
+                $res = $user->getListaUsuario();
+                break;
             case 'actualizarUsuarioUA':
                 $responsableAnterior = $_REQUEST['responsableAnterior'];
                 $res = $user->eliminarUsuarioUA($responsableAnterior);
@@ -12,11 +40,6 @@
                 $idUA = $_REQUEST['idUA'];
                 $responsableActual = $_REQUEST['responsableActual'];
                 $res = $user->agregarUsuarioUA($responsableActual,$idUA);
-                // if(is_numeric($res)){
-                //     $idUA = $_REQUEST['idUA'];
-                //     $responsableActual = $_REQUEST['responsableActual'];
-                //     $res = $user->agregarUsuarioUA($responsableActual,$idUA);
-                // }
                 break;
             case 'getCorreoUsuarios': 
                 $correo = $_REQUEST['correo'];
@@ -32,9 +55,11 @@
                 break;
             case 'actualizarUsuario':
                 $id=$_REQUEST['id'];
+                $nombre=$_REQUEST['nombre'];
+                $apellido=$_REQUEST['apellido'];
                 $correo=$_REQUEST['correo'];
                 $telefono=$_REQUEST['telefono'];
-                $res = $user->actualizarUsuario($id,$correo,$telefono);
+                $res = $user->actualizarUsuario($id,$nombre,$apellido,$correo,$telefono);
                 break;
             case 'obtenerRolesAjenos':
                 $idUser=$_REQUEST['idUser'];

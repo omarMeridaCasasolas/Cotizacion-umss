@@ -9,6 +9,16 @@
             $this->sentenceSQL=null;
             $this->connexion_bd=null;
         } 
+        public function insertarUsuarioARol($res,$tipo){
+            $sql = "INSERT INTO usuario_rol(id_usuario,id_rol) VALUES(:idUsuario,:idRol)";
+            $sentenceSQL = $this->connexion_bd->prepare($sql);
+            $res = $sentenceSQL->execute(array(":idUsuario"=>$res,":idRol"=>$tipo));
+            //$respuesta = $sentenceSQL->fetchAll(PDO::FETCH_ASSOC);
+            $sentenceSQL->closeCursor();
+            //$res = json_encode($respuesta);
+            return $res;
+        }
+
         public function getRolUsuario($idUsuario){
             $sql = "SELECT nombre_rol FROM rol where id_rol = (SELECT id_rol FROM usuario_rol WHERE id_usuario = :id)";
             $sentenceSQL = $this->connexion_bd->prepare($sql);

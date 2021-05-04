@@ -54,12 +54,157 @@
         <div class="m-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#myModal">+ Usuario</button>
         </div>
-        <h1 id="idH1">Hola mundo</h1>
-        <select name="" id="idSelect">
-            <option value="">uno</option>
-        <option value="">Dos</option>
-        </select>
+        <table class="table-sm display table-bordered" id="tablaUsuario">
+            <thead>
+                <tr class="bg-info">
+                    <th>Nombre Usuario</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+        </table>
+        <!-- MODAL PARA DAR DE BAJA -->
+        <div class="modal fade" id="myModal3">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <!-- Modal Header -->
+                    <div class="modal-header bg-danger">
+                        <h4 class="modal-title text-center">Cambiar estado de usuario</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="" id="formBajaUsuario">
+                            <input type="text" name="id_usuario" id="idUsuario" class="d-none">
+                            <input type="text" name="estadoUsuario" id="estadoUsuario" class="d-none">
+                            <h5 id="idTextEstado"></h5>
+                            <!-- <h5>Desea cambiar el estado de la : <strong id='bajaUANombre'>UA</strong>, desabilitara/habilara las tareas de los usuarios</h5> -->
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-primary" value="Cambiar">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- The Modal Agregar Usuario-->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <!-- Modal Header -->
+                    <div class="modal-header bg-success">
+                        <h4 class="modal-title">Crear Usuario</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="" id="formAddUsuario">
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="">Nombre:</label>
+                                    <input type="text" name="" id="nombreUsuario" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="">Apellido:</label>
+                                    <input type="text" name="" id="apellidoUsuario" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="">Telefono:</label>
+                                    <input type="text" name="" id="telefonoUsuario" class="form-control" required pattern="[0-9]{6,8}" title="Solo números entre 6 a 8 dígitos" autocomplete="off">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="">Carnet:</label>
+                                    <input type="text" name="" id="carnetUsuario" class="form-control" required pattern="[0-9]{6,8}" title="Solo números entre 6 a 8 dígitos" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-7">
+                                    <label for="">Correo:</label>
+                                    <input type="mail" name="" id="correoUsuario" class="form-control" required autocomplete="off" >
+                                </div>
+                                <div class="form-group col-5">
+                                    <label for="">Password:</label>
+                                    <input type="password" name="" id="passUsuario" class="form-control" required pattern="[A-Za-z0-9_-]{4,15}" title="Solo letras y números entre 4 y 15 caracteres" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Tipo:</label>
+                                <select name="" id="tipoUsuario" class="form-control" required> 
+                                    <option value="2">Unidad administrativa</option>
+                                    <option value="3">Unidad de gastos</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-succes" value="Crear">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <!-- Modal Header -->
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title">Editar Usuario</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="" id="formEditUsuario">
+                            <input type="text" name="" id="idEditUsuario" class="d-none">
+                            <input type="text" name="" id="idEditRolUsuario" class="d-none">
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="">Nombre:</label>
+                                    <input type="text" name="" id="nombreEditUsuario" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="">Apellido:</label>
+                                    <input type="text" name="" id="apellidoEditUsuario" class="form-control" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required autocomplete="off" title="Solo letras y vocales">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-7">
+                                    <label for="">Correo:</label>
+                                    <input type="mail" name="" id="correoEditUsuario" class="form-control" required autocomplete="off" >
+                                </div>
+                                <div class="form-group col-5">
+                                    <label for="">Telefono:</label>
+                                    <input type="text" name="" id="telefonoEditUsuario" class="form-control" required pattern="[0-9]{6,8}" title="Solo números entre 6 a 8 dígitos" autocomplete="off">
+                                </div>
+                            </div>
+                            <input type="text" name="" id="copiaTipoEditUsuario" class="d-none">
+                            <div class="form-group">
+                                <label for="">Tipo:</label>
+                                <select name="" id="tipoEditUsuario" class="form-control" required> 
+                                    <option value="2">Unidad administrativa</option>
+                                    <option value="3">Unidad de gastos</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-primary" value="Actualizar">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+    
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
